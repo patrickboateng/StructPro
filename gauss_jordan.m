@@ -29,24 +29,6 @@ augMat = [A b];
 
 % Forward Elimination
 for i=1:r
-    % Swap Algorithm
-    if augMat(i, i) == 0
-        % Swap if pivot == 0
-        for k=i+1:r
-            if augMat(k, i) ~= 0
-                tmp = augMat(i, :);
-                augMat(i,:) = augMat(k, :);
-                augMat(k, :) = tmp;
-                break;
-            end
-        end
-
-    end
-    % Swap end
-
-    if augMat(i, i) == 0, error("")
-    end
-
     for j=i+1:r
         augMat(i, :) = augMat(i, :) ./ augMat(i, i);
         tr_vec = augMat(i, :) .* (augMat(j, i) / augMat(i, i));
