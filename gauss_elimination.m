@@ -39,10 +39,7 @@ unknown_vars = zeros(r, 1);
 
 % Backward Substitution
 for i=r:-1:1
-    x = 0;
-    for j=r:-1:1
-        x = x + augMat(i, j) * unknown_vars(j, 1);
-    end
+    x = augMat(i, 1:r) * unknown_vars;
     x = (augMat(i, end) - x)/ augMat(i, i);
     unknown_vars(i, 1) = x;
 end
