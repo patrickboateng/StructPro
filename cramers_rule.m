@@ -21,4 +21,4 @@ for i=1:c
     A(:, i) = tmp;
 end
 
-unkwown_vars
+disp(unkwown_vars)
