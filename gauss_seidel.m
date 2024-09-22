@@ -2,8 +2,6 @@ clc;clearvars
 
 A = [4 1 -1; 2 7 1; 1 -3 12];
 b = [3; 19; 31];
-% A = [1 -1; 2 -3];
-% b = [10; -6];
 
 [r, ~] = size(A);
 tol = 10^-6;
@@ -22,9 +20,10 @@ while true
             unknown_vars(i) = (b(i) - x) / A(i, i);
         end
     end
+    % Check the error tolerance
     if norm(unknown_vars - x_old) < tol
         break
     end
 end
 
-unknown_vars
+disp(unknown_vars);

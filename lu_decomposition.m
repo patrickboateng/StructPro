@@ -3,10 +3,6 @@ clc;clearvars;
 A = [2, 1, 1; 4, 4, 1; 6, -5, 8];
 b = [4; 7; 15];
 
-A = [1 -1; 2 -3];
-b = [10; -6];
-
-
 % r will serve as the total number of iterations.
 [r, c] = size(A);
 
