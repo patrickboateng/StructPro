@@ -16,9 +16,9 @@ while true
             if i==j
                 continue
             end
-            x = x + A(i, j) * unknown_vars(j);
-            unknown_vars(i) = (b(i) - x) / A(i, i);
+            x = x + A(i, j) * unknown_vars(j);  
         end
+        unknown_vars(i) = (b(i) - x) / A(i, i);
     end
     % Check the error tolerance
     if norm(unknown_vars - x_old) < tol
