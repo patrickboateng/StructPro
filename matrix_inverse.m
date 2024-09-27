@@ -4,7 +4,7 @@ clc;clearvars;
 
 A = [3, -0.1, -0.2; 0.1, 7, -0.3; 0.3, -0.2, 10];
 
-A = [2, 1; 2, 2];
+% A = [2, 1; 2, 2];
 
 % r will serve as the total number of iterations.
 [r, c] = size(A);
