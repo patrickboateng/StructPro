@@ -12,11 +12,16 @@ b = [2; 6; -3];
 A = [45 2 3; -3 22 2; 5 1 20];
 b = [58; 47; 67];
 
-%A = [2 4 -2 2 4; 0 1 1 4 6; 0 3 15 2 8; 2 3 5 4 4; 1 1 1 1 5];
-%b = [2; 4; 36; 8; 6];
+A = [
+    0.5 0 0.866 0 0 0;
+    -0.866 0 0.5 0 0 0;
+    0.5 0 0 1 0 0;
+    0.866 1 0 0 0 1;
+    0 0 0.866 0 1 0;
+    0 1 0.5 0 0 0;  
+];
 
-% A = [0 1 1; 2 4 -2; 0 3 15];
-% b = [4; 2; 36];
+b = [-1000; 0; 0; 0; 0; 0];
 
 % r will serve as the total number of iterations.
 [r, c] = size(A);
@@ -27,8 +32,31 @@ end
 % Augmented matrix
 augMat = [A b];
 
+EPSILON = 1e-6;
+
 % Forward Elimination
 for i=1:r
+
+    max_ = i;
+    for m =i+1:r
+        if abs(augMat(max_, max_)) > EPSILON
+            break;
+        end
+
+        if abs(augMat(m, i)) > abs(augMat(i, i))
+            max_ = m;
+        end
+    end
+    
+    if max_ ~= i
+        tmp = augMat(i, :);
+        augMat(i, :) = augMat(max_, :);
+        augMat(max_, :) = tmp;
+    end
+
+    if abs(augMat(i, i)) < EPSILON, error("Singular Matrix")
+    end 
+
     for j=i+1:r
         augMat(i, :) = augMat(i, :) ./ augMat(i, i);
         tr_vec = augMat(i, :) .* (augMat(j, i) / augMat(i, i));
