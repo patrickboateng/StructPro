@@ -50,7 +50,7 @@ function X = lu_decomposition(A, b)
     
     % Forward Substitution
     for i=1:r
-        x = sum(L(i, :)' .* unknown_z_vars);
+        x = sum(L(i, :) * unknown_z_vars);
         x = (b(i) - x)/ L(i, i);
         unknown_z_vars(i, 1) = x;
     end
