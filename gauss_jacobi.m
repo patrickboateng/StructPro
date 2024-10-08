@@ -5,10 +5,11 @@ function X = gauss_jacobi(A, b)
     tol = 10^-6;
     
     unknown_vars = zeros(r, 1);
+    MAX_ITER = 1000000;
     
-    counter = 0;
+    iter = 0;
     
-    while true
+    while iter < MAX_ITER
         x_old = unknown_vars;
         for i=1:r
             x = 0;
@@ -24,7 +25,9 @@ function X = gauss_jacobi(A, b)
         if norm(unknown_vars - x_old) < tol
             break
         end
-        counter = counter + 1;
+
+        iter = iter + 1;
+        
     end
 
     X = unknown_vars;
