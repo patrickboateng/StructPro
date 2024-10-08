@@ -44,10 +44,11 @@ function X = gauss_seidel(A, b)
         if norm(unknown_vars - x_old) < tol
             break
         end
+
         iter = iter + 1;
     
     end
-        X = unknown_vars;
+    X = unknown_vars;
 end
 % disp(global_errors);
 % disp(unknown_vars);
