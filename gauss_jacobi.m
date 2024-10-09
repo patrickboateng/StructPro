@@ -1,11 +1,16 @@
 
-function X = gauss_jacobi(A, b)
+function X = gauss_jacobi(A, b, MAX_ITER, TOL)
+
+    if nargin < 3
+        MAX_ITER = 1000000;
+        TOL = 1e-6;
+    elseif nargin < 4
+        TOL = 1e-6;
+    end
 
     [r, ~] = size(A);
-    tol = 10^-6;
     
     unknown_vars = zeros(r, 1);
-    MAX_ITER = 1000000;
     
     iter = 0;
     
@@ -22,7 +27,7 @@ function X = gauss_jacobi(A, b)
             unknown_vars(i) = (b(i) - x) / A(i, i);
         end
         % Check the error tolerance
-        if norm(unknown_vars - x_old) < tol
+        if norm(unknown_vars - x_old) < TOL
             break
         end
 

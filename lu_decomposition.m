@@ -1,5 +1,9 @@
 
-function X = lu_decomposition(A, b)
+function X = lu_decomposition(A, b, TOL)
+
+    if nargin < 3
+        TOL = 1e-6;
+    end
 
     % r will serve as the total number of iterations.
     [r, c] = size(A);
@@ -12,8 +16,6 @@ function X = lu_decomposition(A, b)
     
     % Upper triangular matrix
     U = A;
-    
-    TOL = 1e-6;
     
     % Forward Elimination
     for i=1:r
@@ -50,7 +52,7 @@ function X = lu_decomposition(A, b)
     
     % Forward Substitution
     for i=1:r
-        x = sum(L(i, :) * unknown_z_vars);
+        x = L(i, :) * unknown_z_vars;
         x = (b(i) - x)/ L(i, i);
         unknown_z_vars(i, 1) = x;
     end
@@ -67,4 +69,3 @@ function X = lu_decomposition(A, b)
     end
     X = unknown_x_vars;
 end
-

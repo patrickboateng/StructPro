@@ -1,5 +1,9 @@
 
-function X = gauss_jordan(A, b)
+function x = gauss_jordan(A, b, TOL)
+
+    if nargin < 3
+        TOL = 1e-6;
+    end
 
     % r will serve as the total number of iterations.
     [r, c] = size(A);
@@ -10,14 +14,12 @@ function X = gauss_jordan(A, b)
     % Augmented matrix
     augMat = [A b];
     
-    EPSILON = 1e-6;
-    
     % Forward Elimination
     for i=1:r
     
         max_ = i;
         for m =i+1:r
-            if abs(augMat(max_, max_)) > EPSILON
+            if abs(augMat(max_, max_)) > TOL
                 break;
             end
     
@@ -32,7 +34,7 @@ function X = gauss_jordan(A, b)
             augMat(max_, :) = tmp;
         end
     
-        if abs(augMat(i, i)) < EPSILON, error("Singular Matrix")
+        if abs(augMat(i, i)) < TOL, error("Singular Matrix")
         end 
     
         for j=i+1:r
@@ -50,5 +52,5 @@ function X = gauss_jordan(A, b)
            augMat(j, :) = augMat(j, :) - tr_vec;
         end
     end
-    X = augMat(:, end);
+    x = augMat(:, end);
 end

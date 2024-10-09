@@ -1,16 +1,20 @@
 
-function X = gauss_seidel(A, b)
+function X = gauss_seidel(A, b, MAX_TOL, TOL)
+
+    if nargin < 3
+        MAX_ITER = 1000000;
+        TOL = 1e-6;
+    elseif nargin < 4
+        TOL = 1e-6;
+    end
 
     [r, ~] = size(A);
-    tol = 1e-6;
     
     unknown_vars = zeros(r, 1);
     
     % global_errors = zeros(1, r);
     
     % iter = 1;
-    
-    MAX_ITER = 1000000;
     iter = 0;
     
     while iter < MAX_ITER
@@ -41,7 +45,7 @@ function X = gauss_seidel(A, b)
         % if max(local_errors) < tol
         %     break
         % end
-        if norm(unknown_vars - x_old) < tol
+        if norm(unknown_vars - x_old) < TOL
             break
         end
 

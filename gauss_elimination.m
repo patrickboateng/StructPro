@@ -1,5 +1,9 @@
 
-function X = gauss_elimination(A, b)
+function X = gauss_elimination(A, b, TOL)
+
+    if nargin < 3
+        TOL = 1e-10;
+    end
 
     % r will serve as the total number of iterations.
     [r, c] = size(A);
@@ -9,9 +13,7 @@ function X = gauss_elimination(A, b)
     
     % Augmented matrix
     augMat = [A b];
-    
-    TOL = 1e-6;
-    
+   
     % Forward Elimination
     for i=1:r
         % find pivot and swap

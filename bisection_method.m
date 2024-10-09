@@ -23,6 +23,8 @@ function X = bisection_method(a, b, f)
         end
     
         avg = (a + b) / 2;
+        % avg = (a * f_b - b * f_a) / (f_b - f_a);
+
     
         f_avg = f(avg);
     
@@ -37,7 +39,7 @@ function X = bisection_method(a, b, f)
         end
         
     end
-
+    disp(i)
     X = avg;
 
 end
