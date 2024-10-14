@@ -1,6 +1,9 @@
 
-function X = bisection_method(a, b, f)
+function X = bisection_method(a, b, f, MAX_ITER)
 
+    if nargin < 4
+        MAX_ITER = 100;
+    end
     avg = (a + b) / 2;
     
     f_a = f(a);
@@ -9,8 +12,7 @@ function X = bisection_method(a, b, f)
     
     TOL = 1e-6;
     
-    i = 1;
-    MAX_ITER = 100;
+    idx = 1;
     
     while f_a * f_b < 0
         
@@ -23,8 +25,6 @@ function X = bisection_method(a, b, f)
         end
     
         avg = (a + b) / 2;
-        % avg = (a * f_b - b * f_a) / (f_b - f_a);
-
     
         f_avg = f(avg);
     
@@ -32,21 +32,12 @@ function X = bisection_method(a, b, f)
             break
         end
             
-        i = i + 1;
+        idx = idx + 1;
     
-        if i > MAX_ITER
+        if idx > MAX_ITER
             break
         end
         
     end
-    disp(i)
     X = avg;
-
 end
-
-
-% disp(avg);
-% disp(i);
-% 
-
-
