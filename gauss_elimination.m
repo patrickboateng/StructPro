@@ -1,56 +1,63 @@
 
 function X = gauss_elimination(A, b, TOL)
+arguments
+    A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
+    b  double {mustBeColumn}
+    TOL {mustBeFloat} = 1e-6
+end
 
-    if nargin < 3
-        TOL = 1e-10;
+% r will serve as the total number of iterations.
+[r, c] = size(A);
+
+if r ~= c, error("Gauss elimination works for square matrices only.")
+end
+
+% Augmented matrix
+augMat = [A b];
+
+% Forward Elimination
+for i=1:r
+    % find pivot and swap
+    max_ = i;
+    for m =i+1:r
+        if abs(augMat(max_, max_)) > TOL
+            break;
+        end
+
+        if abs(augMat(m, i)) > abs(augMat(i, i))
+            max_ = m;
+        end
+    end
+    
+    if max_ ~= i
+        tmp = augMat(i, :);
+        augMat(i, :) = augMat(max_, :);
+        augMat(max_, :) = tmp;
     end
 
-    % r will serve as the total number of iterations.
-    [r, c] = size(A);
-    
-    if r ~= c, error("Gauss elimination works for square matrices only.")
+    if abs(augMat(i, i)) < TOL, error("Singular Matrix")
+    end 
+
+    for j=i+1:r
+        tr_vec = augMat(i, :) .* (augMat(j, i) / augMat(i, i));
+        augMat(j, :) = augMat(j, :) - tr_vec;
     end
-    
-    % Augmented matrix
-    augMat = [A b];
-   
-    % Forward Elimination
-    for i=1:r
-        % find pivot and swap
-        max_ = i;
-        for m =i+1:r
-            if abs(augMat(max_, max_)) > TOL
-                break;
-            end
-    
-            if abs(augMat(m, i)) > abs(augMat(i, i))
-                max_ = m;
-            end
-        end
-        
-        if max_ ~= i
-            tmp = augMat(i, :);
-            augMat(i, :) = augMat(max_, :);
-            augMat(max_, :) = tmp;
-        end
-    
-        if abs(augMat(i, i)) < TOL, error("Singular Matrix")
-        end 
-    
-        for j=i+1:r
-            tr_vec = augMat(i, :) .* (augMat(j, i) / augMat(i, i));
-            augMat(j, :) = augMat(j, :) - tr_vec;
-        end
-    end
-    
-    unknown_vars = zeros(r, 1);
-    
-    % Backward Substitution
-    for i=r:-1:1
-        x = augMat(i, 1:r) * unknown_vars;
-        x = (augMat(i, end) - x)/ augMat(i, i);
-        unknown_vars(i, 1) = x;
-    end
-    
-    X = unknown_vars;
+end
+
+unknown_vars = zeros(r, 1);
+
+% Backward Substitution
+for i=r:-1:1
+    x = augMat(i, 1:r) * unknown_vars;
+    x = (augMat(i, end) - x)/ augMat(i, i);
+    unknown_vars(i, 1) = x;
+end
+
+X = unknown_vars;
+end
+
+
+function mustBeSquareMatrix(A)
+[r, c] = size(A);
+assert(isequal(r, c), "Value must be a square matrix")
 end
