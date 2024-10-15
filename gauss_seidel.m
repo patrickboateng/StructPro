@@ -1,35 +1,34 @@
 
-function X = gauss_seidel(A, b, MAX_TOL, TOL)
+function X = gauss_seidel(A, b, TOL, MAX_ITER)
+arguments
+    A (:, :) double {mustBeMatrix}
+    b  double {mustBeColumn}
+    TOL {mustBeFloat} = 1e-6
+    MAX_ITER {mustBeInteger} = 1000
+end
 
-    if nargin < 3
-        MAX_ITER = 1000000;
-        TOL = 1e-6;
-    elseif nargin < 4
-        TOL = 1e-6;
+[r, ~] = size(A);
+
+unknown_vars = zeros(r, 1);
+
+% global_errors = zeros(1, r);
+
+% iter = 1;
+iter = 0;
+
+while iter < MAX_ITER
+x_old = unknown_vars;
+for i=1:r
+x = 0;
+for j=1:r
+    if i==j
+        continue
     end
-
-    [r, ~] = size(A);
+    x = x + A(i, j) * unknown_vars(j);
+end
+unknown_vars(i) = (b(i) - x) / A(i, i);
+end
     
-    unknown_vars = zeros(r, 1);
-    
-    % global_errors = zeros(1, r);
-    
-    % iter = 1;
-    iter = 0;
-    
-    while iter < MAX_ITER
-        x_old = unknown_vars;
-        for i=1:r
-            x = 0;
-            for j=1:r
-                if i==j
-                    continue
-                end
-                x = x + A(i, j) * unknown_vars(j);
-            end
-            unknown_vars(i) = (b(i) - x) / A(i, i);
-        end
-        
         % Calculate error for each variable
         % local_errors = zeros(1, r);
         % for k=1:r
@@ -45,14 +44,13 @@ function X = gauss_seidel(A, b, MAX_TOL, TOL)
         % if max(local_errors) < tol
         %     break
         % end
-        if norm(unknown_vars - x_old) < TOL
-            break
-        end
+if norm(unknown_vars - x_old) < TOL
+    break
+end
 
-        iter = iter + 1;
-    
-    end
-    X = unknown_vars;
+iter = iter + 1;
+end
+X = unknown_vars;
 end
 % disp(global_errors);
 % disp(unknown_vars);

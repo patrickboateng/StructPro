@@ -1,71 +1,74 @@
 
 function X = lu_decomposition(A, b, TOL)
+arguments
+    A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
+    b  double {mustBeColumn}
+    TOL {mustBeFloat} = 1e-6
+end
 
-    if nargin < 3
-        TOL = 1e-6;
+% r will serve as the total number of iterations.
+[r, ~] = size(A);
+
+% Lower triangular matrix
+L = eye(r);
+
+% Upper triangular matrix
+U = A;
+
+% Forward Elimination
+for i=1:r
+    % find pivot and swap
+    max_ = i;
+    for m =i+1:r
+        if abs(U(max_, max_)) > TOL
+            break;
+        end
+
+        if abs(U(m, i)) > abs(U(i, i))
+            max_ = m;
+        end
     end
 
-    % r will serve as the total number of iterations.
-    [r, c] = size(A);
-    
-    if r ~= c, error("LU Decomposition works for square matrices only.")
+    if max_ ~= i
+        tmp = U(i, :);
+        U(i, :) = U(max_, :);
+        U(max_, :) = tmp;
     end
-    
-    % Lower triangular matrix
-    L = eye(r);
-    
-    % Upper triangular matrix
-    U = A;
-    
-    % Forward Elimination
-    for i=1:r
-        % find pivot and swap
-        max_ = i;
-        for m =i+1:r
-            if abs(U(max_, max_)) > TOL
-                break;
-            end
-    
-            if abs(U(m, i)) > abs(U(i, i))
-                max_ = m;
-            end
-        end
-    
-        if max_ ~= i
-            tmp = U(i, :);
-            U(i, :) = U(max_, :);
-            U(max_, :) = tmp;
-        end
-    
-        if abs(U(i, i)) < TOL, error("Singular Matrix")
-        end
-    
-        for j=i+1:r
-            factor = (U(j, i) / U(i, i));
-            tr_vec = U(i, :) .* factor;
-            U(j, :) = U(j, :) - tr_vec;
-            L(j, i) = factor;
-        end
+
+    if abs(U(i, i)) < TOL, error("Singular Matrix")
     end
-    
-    unknown_z_vars = zeros(r, 1);
-    
-    % Forward Substitution
-    for i=1:r
-        x = L(i, :) * unknown_z_vars;
-        x = (b(i) - x)/ L(i, i);
-        unknown_z_vars(i, 1) = x;
+
+    for j=i+1:r
+        factor = (U(j, i) / U(i, i));
+        tr_vec = U(i, :) .* factor;
+        U(j, :) = U(j, :) - tr_vec;
+        L(j, i) = factor;
     end
-    
-    z = unknown_z_vars;
-    
-    unknown_x_vars = zeros(r, 1);
-    
-    % Backward Substitution
-    for i=r:-1:1
-        x = U(i, :) * unknown_x_vars;
-        x = (z(i) - x)/ U(i, i);
-        unknown_x_vars(i, 1) = x;
-    end
-    X = unknown_x_vars;
+end
+
+unknown_z_vars = zeros(r, 1);
+
+% Forward Substitution
+for i=1:r
+    x = L(i, :) * unknown_z_vars;
+    x = (b(i) - x)/ L(i, i);
+    unknown_z_vars(i, 1) = x;
+end
+
+z = unknown_z_vars;
+
+unknown_x_vars = zeros(r, 1);
+
+% Backward Substitution
+for i=r:-1:1
+    x = U(i, :) * unknown_x_vars;
+    x = (z(i) - x)/ U(i, i);
+    unknown_x_vars(i, 1) = x;
+end
+X = unknown_x_vars;
+end
+
+function mustBeSquareMatrix(A)
+[r, c] = size(A);
+assert(isequal(r, c), "Value must be a square matrix")
 end
