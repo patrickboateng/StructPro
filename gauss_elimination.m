@@ -1,16 +1,12 @@
-
-function X = gauss_elimination(A, b, TOL)
+function unknown_vars = gauss_elimination(A, b, opts)
 arguments
     A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
     b  double {mustBeColumn}
-    TOL {mustBeFloat} = 1e-6
+    opts.TOL {mustBeFloat} = 1e-6
 end
 
 % r will serve as the total number of iterations.
-[r, c] = size(A);
-
-if r ~= c, error("Gauss elimination works for square matrices only.")
-end
+[r, ~] = size(A);
 
 % Augmented matrix
 augMat = [A b];
@@ -20,7 +16,7 @@ for i=1:r
     % find pivot and swap
     max_ = i;
     for m =i+1:r
-        if abs(augMat(max_, max_)) > TOL
+        if abs(augMat(max_, max_)) > opts.TOL
             break;
         end
 
@@ -35,7 +31,7 @@ for i=1:r
         augMat(max_, :) = tmp;
     end
 
-    if abs(augMat(i, i)) < TOL, error("Singular Matrix")
+    if abs(augMat(i, i)) < opts.TOL, error("Singular Matrix")
     end 
 
     for j=i+1:r
@@ -52,8 +48,6 @@ for i=r:-1:1
     x = (augMat(i, end) - x)/ augMat(i, i);
     unknown_vars(i, 1) = x;
 end
-
-X = unknown_vars;
 end
 
 function mustBeSquareMatrix(A)
