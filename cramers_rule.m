@@ -5,17 +5,16 @@ arguments
     b (:, 1) double {mustBeColumn}
 end
 
-[r, c] = size(A);
+[r, ~] = size(A);
 
 detA = det(A);
 
 x = zeros(r, 1);
 
-for i=1:c
+for i=1:r
     tmp = A(:, i);
     A(:, i) = b;
     x(i) = det(A) / detA;
     A(:, i) = tmp;
 end
-
 end
