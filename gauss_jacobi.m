@@ -1,4 +1,4 @@
-function unknown_vars = gauss_jacobi(A, b, opts)
+function unknown_x_vars = gauss_jacobi(A, b, opts)
 arguments
     A (:, :) double {mustBeMatrix}
     b  double {mustBeColumn}
@@ -8,12 +8,12 @@ end
 
 [r, ~] = size(A);
 
-unknown_vars = zeros(r, 1);
+unknown_x_vars = zeros(r, 1);
 
 idx = 1;
 
 while idx < opts.MAX_ITER
-    x_old = unknown_vars;
+    x_old = unknown_x_vars;
     for i=1:r
         x = 0;
         for j=1:r
@@ -21,9 +21,9 @@ while idx < opts.MAX_ITER
                 x = x + A(i, j) * x_old(j);
             end
         end
-        unknown_vars(i) = (b(i) - x) / A(i, i);
+        unknown_x_vars(i) = (b(i) - x) / A(i, i);
     end
-    new_error = norm(unknown_vars - x_old);
+    new_error = norm(unknown_x_vars - x_old);
     
     if new_error < opts.TOL
         break
