@@ -9,4 +9,3 @@ R = (5/2 * sind(x) - sind(40 - x)) * (pi/180);
 end
 
 disp(newtons_method(30, @f, @d_f))
-
