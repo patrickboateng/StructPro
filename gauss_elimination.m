@@ -1,4 +1,4 @@
-function unknown_vars = gauss_elimination(A, b, opts)
+function unknown_x_vars = gauss_elimination(A, b, opts)
 arguments
     A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
     b  double {mustBeColumn}
@@ -40,13 +40,13 @@ for i=1:r
     end
 end
 
-unknown_vars = zeros(r, 1);
+unknown_x_vars = zeros(r, 1);
 
 % Backward Substitution
 for i=r:-1:1
-    x = augMat(i, 1:r) * unknown_vars;
+    x = augMat(i, 1:r) * unknown_x_vars;
     x = (augMat(i, end) - x)/ augMat(i, i);
-    unknown_vars(i, 1) = x;
+    unknown_x_vars(i, 1) = x;
 end
 end
 
