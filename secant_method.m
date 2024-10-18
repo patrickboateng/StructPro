@@ -1,6 +1,6 @@
 
 
-function x1 = secant_method(x_0, x_1, f, opts)
+function soln = secant_method(x_0, x_1, f, opts)
 arguments
     x_0 {mustBeNumeric}
     x_1 {mustBeNumeric}
@@ -13,7 +13,6 @@ x0 = x_0;
 x1 = x_1;
 
 idx = 1;
-
 while idx < opts.MAX_ITER
 
     g_x1 = (f(x1) - f(x0)) / (x1 - x0);
@@ -26,4 +25,6 @@ while idx < opts.MAX_ITER
         break
     end
     idx = idx + 1;
+end
+soln = x1;
 end
