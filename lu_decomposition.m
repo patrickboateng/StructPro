@@ -1,9 +1,9 @@
 
-function X = lu_decomposition(A, b, TOL)
+function unknown_x_vars = lu_decomposition(A, b, opts)
 arguments
     A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
     b  double {mustBeColumn}
-    TOL {mustBeFloat} = 1e-6
+    opts.TOL {mustBeFloat} = 1e-6
 end
 
 % r will serve as the total number of iterations.
@@ -20,7 +20,7 @@ for i=1:r
     % find pivot and swap
     max_ = i;
     for m =i+1:r
-        if abs(U(max_, max_)) > TOL
+        if abs(U(max_, max_)) > opts.TOL
             break;
         end
 
@@ -35,13 +35,12 @@ for i=1:r
         U(max_, :) = tmp;
     end
 
-    if abs(U(i, i)) < TOL, error("Singular Matrix")
+    if abs(U(i, i)) < opts.TOL, error("Singular Matrix")
     end
 
     for j=i+1:r
         factor = (U(j, i) / U(i, i));
-        tr_vec = U(i, :) .* factor;
-        U(j, :) = U(j, :) - tr_vec;
+        U(j, :) = U(j, :) - U(i, :) .* factor;
         L(j, i) = factor;
     end
 end
@@ -62,10 +61,8 @@ unknown_x_vars = zeros(r, 1);
 % Backward Substitution
 for i=r:-1:1
     x = U(i, :) * unknown_x_vars;
-    x = (z(i) - x)/ U(i, i);
-    unknown_x_vars(i, 1) = x;
+    unknown_x_vars(i, 1) = (z(i) - x)/ U(i, i);
 end
-X = unknown_x_vars;
 end
 
 function mustBeSquareMatrix(A)
