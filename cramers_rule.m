@@ -1,5 +1,5 @@
 
-function x = cramers_rule(A, b)
+function unknown_x_vars = cramers_rule(A, b)
 arguments
     A (:, :) double {mustBeMatrix}
     b (:, 1) double {mustBeColumn}
@@ -9,12 +9,12 @@ end
 
 detA = det(A);
 
-x = zeros(r, 1);
+unknown_x_vars = zeros(r, 1);
 
 for i=1:r
     tmp = A(:, i);
     A(:, i) = b;
-    x(i) = det(A) / detA;
+    unknown_x_vars(i) = det(A) / detA;
     A(:, i) = tmp;
 end
 end
