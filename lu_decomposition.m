@@ -1,4 +1,3 @@
-
 function unknown_x_vars = lu_decomposition(A, b, opts)
 arguments
     A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
