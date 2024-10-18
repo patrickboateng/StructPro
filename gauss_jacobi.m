@@ -23,10 +23,18 @@ while idx < opts.MAX_ITER
         end
         unknown_vars(i) = (b(i) - x) / A(i, i);
     end
-    % Check the error tolerance
-    if norm(unknown_vars - x_old) < opts.TOL
+    new_error = norm(unknown_vars - x_old);
+    
+    if new_error < opts.TOL
         break
     end
+    
+    if idx > 1
+        if ~(new_error - old_error < 0)
+            warning("Solution is not converging.")
+        end
+    end
+    old_error = new_error;
     idx = idx + 1;
 end 
 end
