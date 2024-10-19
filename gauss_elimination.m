@@ -9,12 +9,12 @@ end
 [r, ~] = size(A);
 
 % Augmented matrix assigned to A for code optimization.
-A = [A b]; 
+A = [A b];
 
 % Forward Elimination
 for i=1:r
     % find pivot and swap if zero or close to zero.
-    A = swap(A, pv_idx=1, total_rows=r, TOL=opts.TOL);
+    A = swap(A, pv_idx=i, total_rows=r, TOL=opts.TOL);
 
     for j=i+1:r
         tr_vec = A(i, :) .* (A(j, i) / A(i, i));
