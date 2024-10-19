@@ -1,7 +1,6 @@
-
 function unknown_x_vars = gauss_jordan(A, b, opts)
 arguments
-    A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
+    A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
     opts.TOL {mustBeFloat} = 1e-6
 end
@@ -9,48 +8,26 @@ end
 % r will serve as the total number of iterations.
 [r, ~] = size(A);
 
-% Augmented matrix
-augMat = [A b];
+% Augmented matrix assigned to A for code optimization.
+A = [A b];
 
 % Forward Elimination
 for i=1:r
-    max_ = i;
-    for m =i+1:r
-        if abs(augMat(max_, max_)) > opts.TOL
-            break;
-        end
-        
-        if abs(augMat(m, i)) > abs(augMat(i, i))
-            max_ = m;
-        end
+    % find pivot and swap if zero or close to zero.
+    A = swap(A, pv_idx=i, total_rows=r, TOL=opts.TOL);
+
+    for j=i+1:r
+        A(i, :) = A(i, :) ./ A(i, i);
+        A(j, :) = A(j, :) - A(i, :) .* A(j, i);
     end
-
-if max_ ~= i
-    tmp = augMat(i, :);
-    augMat(i, :) = augMat(max_, :);
-    augMat(max_, :) = tmp;
-end
-
-if abs(augMat(i, i)) < opts.TOL, error("Singular Matrix")
-end 
-
-for j=i+1:r
-    augMat(i, :) = augMat(i, :) ./ augMat(i, i);
-    augMat(j, :) = augMat(j, :) - augMat(i, :) .* augMat(j, i);
-end
-augMat(i, :) = augMat(i, :) ./ augMat(i, i);
+    A(i, :) = A(i, :) ./ A(i, i);
 end
 
 % Backward Elimination
 for i=r:-1:1
-   for j=i-1:-1:1
-    augMat(j, :) = augMat(j, :) - augMat(i, :) .* augMat(j, i);
-   end
+    for j=i-1:-1:1
+        A(j, :) = A(j, :) - A(i, :) .* A(j, i);
+    end
 end
-unknown_x_vars = augMat(:, end);
-end
-
-function mustBeSquareMatrix(A)
-[r, c] = size(A);
-assert(isequal(r, c), "Value must be a square matrix")
+unknown_x_vars = A(:, end);
 end
