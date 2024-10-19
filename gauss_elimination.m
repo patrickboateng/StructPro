@@ -1,6 +1,6 @@
 function unknown_x_vars = gauss_elimination(A, b, opts)
 arguments
-    A (:, :) double {mustBeMatrix, mustBeSquareMatrix}
+    A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
     opts.TOL {mustBeFloat} = 1e-6
 end
