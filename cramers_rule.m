@@ -1,7 +1,7 @@
 
 function unknown_x_vars = cramers_rule(A, b)
 arguments
-    A (:, :) double {mustBeMatrix}
+    A (:, :) double {mustBeSquareMatrix}
     b (:, 1) double {mustBeColumn}
 end
 
