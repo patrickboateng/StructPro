@@ -1,6 +1,6 @@
 function unknown_x_vars = gauss_jacobi(A, b, opts)
 arguments
-    A (:, :) double {mustBeMatrix}
+    A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
     opts.TOL {mustBeFloat} = 1e-6
     opts.MAX_ITER {mustBeInteger} = 1000
@@ -23,6 +23,7 @@ while idx < opts.MAX_ITER
         end
         unknown_x_vars(i) = (b(i) - x) / A(i, i);
     end
+    
     new_error = norm(unknown_x_vars - x_old);
     
     if new_error < opts.TOL
