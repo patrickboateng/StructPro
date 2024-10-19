@@ -7,14 +7,14 @@ end
 
 [r, ~] = size(A);
 
-detA = det(A);
+detM = det(A);
 
 unknown_x_vars = zeros(r, 1);
 
 for i=1:r
     tmp = A(:, i);
     A(:, i) = b;
-    unknown_x_vars(i) = det(A) / detA;
+    unknown_x_vars(i) = det(A) / detM;
     A(:, i) = tmp;
 end
 end
