@@ -49,8 +49,3 @@ for i=r:-1:1
     unknown_x_vars(i, 1) = x;
 end
 end
-
-function mustBeSquareMatrix(A)
-[r, c] = size(A);
-assert(isequal(r, c), "Value must be a square matrix")
-end
