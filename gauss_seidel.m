@@ -1,6 +1,6 @@
 function unknown_x_vars = gauss_seidel(A, b, opts)
 arguments
-    A (:, :) double {mustBeMatrix}
+    A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
     opts.TOL {mustBeFloat} = 1e-6
     opts.MAX_ITER {mustBeInteger} = 1000
