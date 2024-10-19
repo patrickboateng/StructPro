@@ -7,13 +7,13 @@ arguments
 end
 
 [r, ~] = size(A);
-
 unknown_x_vars = zeros(r, 1);
+old_error = 100;
 
-idx = 0;
-
+idx = 1;
 while idx < opts.MAX_ITER
     x_old = unknown_x_vars;
+
     for i=1:r
         x = 0;
         for j=1:r
@@ -24,17 +24,14 @@ while idx < opts.MAX_ITER
         unknown_x_vars(i) = (b(i) - x) / A(i, i);
     end
 
-    new_error = norm(unknown_x_vars - x_old);
-    
+    new_error = solnError(unknown_x_vars, x_old);
+
     if new_error < opts.TOL
         break
     end
-    
-    if idx > 1
-        if ~(new_error - old_error < 0)
-            warning("Solution is not converging.")
-        end
-    end
+
+    checkError(new_error, old_error);
+
     old_error = new_error;
     idx = idx + 1;
 end
