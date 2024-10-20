@@ -27,7 +27,6 @@ unknown_x_vars = zeros(r, 1);
 % Backward Substitution
 for i=r:-1:1
     x = A(i, 1:r) * unknown_x_vars;
-    x = (A(i, end) - x)/ A(i, i);
-    unknown_x_vars(i, 1) = x;
+    unknown_x_vars(i, 1) = (A(i, end) - x)/ A(i, i);
 end
 end
