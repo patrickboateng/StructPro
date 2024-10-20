@@ -8,6 +8,7 @@ end
 
 max_ = opts.pv_idx;
 
+% Select pivot
 for m =opts.pv_idx+1:opts.total_rows
     if abs(A(max_, max_)) > opts.TOL
         break;
@@ -18,6 +19,7 @@ for m =opts.pv_idx+1:opts.total_rows
     end
 end
 
+% Swap
 if max_ ~= opts.pv_idx
     tmp = A(opts.pv_idx, :);
     A(opts.pv_idx, :) = A(max_, :);
