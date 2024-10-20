@@ -3,7 +3,7 @@ arguments
     a (1, 1) {mustBeNumeric}
     b (1, 1) {mustBeNumeric}
     fn {mustBeA(fn, "function_handle")}
-    opts.TOL (1, 1) {mustBeInteger} = 1e-6
+    opts.TOL (1, 1) {mustBeFloat} = 1e-6
     opts.MAX_ITER (1, 1) {mustBeInteger} = 10000
 end
 
