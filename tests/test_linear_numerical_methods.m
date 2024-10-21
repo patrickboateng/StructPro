@@ -11,8 +11,8 @@ b = [3; 19; 31];
 
 % disp(cramers_rule(A, b))
 % disp(gauss_elimination(A, b))
-disp(gauss_jacobi(A, b))
-disp(gauss_seidel(A, b))
+% disp(gauss_jacobi(A, b))
+% disp(gauss_seidel(A, b))
 % disp(lu_decomposition(A, b))
 % disp(gauss_jordan(A, b))
 % disp(mat_inv(A))
