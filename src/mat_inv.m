@@ -9,12 +9,12 @@ end
 % Lower triangular matrix
 L = eye(r);
 
-TOL = 1e-6;
+tol = 1e-6;
 
 % Forward Elimination
 for i=1:r
     % find pivot and swap if zero or close to zero.
-    A = swap(A, pv_idx=i, total_rows=r, TOL=TOL);
+    A = swap(A, pv_idx=i, total_rows=r, TOL=tol);
 
     for j=i+1:r
         factor = (A(j, i) / A(i, i));

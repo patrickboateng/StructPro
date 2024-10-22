@@ -3,14 +3,14 @@ arguments
     A 
     opts.pv_idx
     opts.total_rows
-    opts.TOL
+    opts.tol
 end
 
 max_ = opts.pv_idx;
 
 % Select pivot
 for m =opts.pv_idx+1:opts.total_rows
-    if abs(A(max_, max_)) > opts.TOL
+    if abs(A(max_, max_)) > opts.tol
         break;
     end
 
@@ -26,6 +26,6 @@ if max_ ~= opts.pv_idx
     A(max_, :) = tmp;
 end
 
-if abs(A(opts.pv_idx, opts.pv_idx)) < opts.TOL, error("Singular Matrix")
+if abs(A(opts.pv_idx, opts.pv_idx)) < opts.tol, error("Singular Matrix")
 end 
 end
