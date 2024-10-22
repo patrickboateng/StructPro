@@ -1,4 +1,4 @@
-function A = swap(A, opts)
+function A = swapRow(A, opts)
 arguments
     A 
     opts.pv_idx
