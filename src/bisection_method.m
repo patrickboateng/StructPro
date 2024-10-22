@@ -3,8 +3,8 @@ arguments
     a (1, 1) {mustBeNumeric}
     b (1, 1) {mustBeNumeric}
     fn {mustBeA(fn, "function_handle")}
-    opts.TOL (1, 1) {mustBeFloat} = 1e-6
-    opts.MAX_ITER (1, 1) {mustBeInteger} = 10000
+    opts.tol (1, 1) {mustBeFloat} = 1e-6
+    opts.max_iter (1, 1) {mustBeInteger} = 10000
 end
 
 f_a = fn(a);
@@ -12,7 +12,7 @@ f_b = fn(b);
 
 idx = 1;
 
-while idx < opts.MAX_ITER
+while idx < opts.max_iter
 
     avg = (a + b) / 2;
     f_avg = fn(avg);
@@ -27,7 +27,7 @@ while idx < opts.MAX_ITER
         b = avg;
     end
 
-    if abs(b - a) < opts.TOL
+    if abs(b - a) < opts.tol
         break
     end     
 
