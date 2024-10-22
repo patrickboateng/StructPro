@@ -14,7 +14,7 @@ A = [A b];
 % Forward Elimination
 for i=1:r
     % find pivot and swap if zero or close to zero.
-    A = swap(A, pv_idx=i, total_rows=r, tol=opts.tol);
+    A = swapRow(A, pv_idx=i, total_rows=r, tol=opts.tol);
 
     for j=i+1:r
         A(i, :) = A(i, :) ./ A(i, i);
