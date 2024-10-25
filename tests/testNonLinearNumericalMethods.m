@@ -35,3 +35,4 @@ testcase.TestData.diff_fn = @(x) (5/2 * sind(x) - sind(40 - x)) * ...
 testcase.TestData.expected = 32.0152;
 testcase.TestData.tol = 1e-4;
 end
+
