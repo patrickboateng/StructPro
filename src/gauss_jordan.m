@@ -2,7 +2,7 @@ function unknown_x_vars = gauss_jordan(A, b, opts)
 arguments
     A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
-    opts.tol {mustBeFloat} = 1e-6
+    opts.Tol {mustBeFloat} = 1e-6
 end
 
 % r will serve as the total number of iterations.
@@ -14,7 +14,7 @@ A = [A b];
 % Forward Elimination
 for i=1:r
     % find pivot and swap if zero or close to zero.
-    [~, A] = swapRow(A, [], pv_idx=i, total_rows=r, tol=opts.tol);
+    [~, A] = swapRow(A, [], PvIdx=i, TotalRows=r, Tol=opts.Tol);
 
     for j=i+1:r
         A(i, :) = A(i, :) ./ A(i, i);

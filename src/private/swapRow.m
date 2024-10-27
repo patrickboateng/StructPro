@@ -2,36 +2,36 @@ function [P, A] = swapRow(A, P, opts)
 arguments
     A
     P
-    opts.pv_idx
-    opts.total_rows
-    opts.tol
+    opts.PvIdx
+    opts.TotalRows
+    opts.Tol
 end
 
 if ~(isempty(P))
     mustBeMatrix(P);
 end
 
-max_idx = opts.pv_idx;
+max_idx = opts.PvIdx;
 
 % Select pivot
-for m =opts.pv_idx+1:opts.total_rows
-    if abs(A(max_idx, max_idx)) > opts.tol
+for m =opts.PvIdx+1:opts.TotalRows
+    if abs(A(max_idx, max_idx)) > opts.Tol
         break
     end
-    if abs(A(m, opts.pv_idx)) > abs(A(opts.pv_idx, opts.pv_idx))
+    if abs(A(m, opts.PvIdx)) > abs(A(opts.PvIdx, opts.PvIdx))
         max_idx = m;
     end
 end
 
 % Swap
-if max_idx ~= opts.pv_idx
-    A = swap(A, opts.pv_idx, max_idx);
+if max_idx ~= opts.PvIdx
+    A = swap(A, opts.PvIdx, max_idx);
     if ~isempty(P)
-        P = swap(P, opts.pv_idx, max_idx);
+        P = swap(P, opts.PvIdx, max_idx);
     end
 end
 
-if abs(A(opts.pv_idx, opts.pv_idx)) < opts.tol
+if abs(A(opts.PvIdx, opts.PvIdx)) < opts.Tol
     error("Singular Matrix")
 end
 end

@@ -24,6 +24,14 @@ fn = testcase.TestData.fn;
 tol = testcase.TestData.tol;
 expected = testcase.TestData.expected;
 res = secant_method(30, 40, fn);
+
+verifyTrue(testcase, abs(res - expected) < tol)
+
+fn = @(t) (300000 / (1 + 30.003*exp(-0.08*t))) - 90000 * exp(-0.045*t) ...
+    - 120000;
+expected = 39.9878;
+res = secant_method(30, 40, fn, Tol=0.05);
+
 verifyTrue(testcase, abs(res - expected) < tol)
 end
 

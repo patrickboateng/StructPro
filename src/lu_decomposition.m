@@ -2,10 +2,10 @@ function unknown_x_vars = lu_decomposition(A, b, opts)
 arguments
     A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
-    opts.tol {mustBeFloat} = 1e-6
+    opts.Tol {mustBeFloat} = 1e-6
 end
 [r, ~] = size(A);
-[P, L, U] = lu_factor(A, tol=opts.tol);
+[P, L, U] = lu_factor(A, tol=opts.Tol);
 b = P * b;
 
 unknown_z_vars = zeros(r, 1);

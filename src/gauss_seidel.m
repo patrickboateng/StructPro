@@ -2,8 +2,8 @@ function unknown_x_vars = gauss_seidel(A, b, opts)
 arguments
     A (:, :) double {mustBeSquareMatrix}
     b  double {mustBeColumn}
-    opts.tol {mustBeFloat} = 1e-6
-    opts.max_iter {mustBeInteger} = 1000
+    opts.Tol {mustBeFloat} = 1e-6
+    opts.MaxIter {mustBeInteger} = 1000
 end
 
 [r, ~] = size(A);
@@ -11,7 +11,7 @@ unknown_x_vars = zeros(r, 1);
 old_error = 100;
 
 idx = 1;
-while idx < opts.max_iter
+while idx < opts.MaxIter
     x_old = unknown_x_vars;
 
     for i=1:r
@@ -26,7 +26,7 @@ while idx < opts.max_iter
 
     new_error = solnError(unknown_x_vars, x_old);
 
-    if new_error < opts.tol
+    if new_error < opts.Tol
         break
     end
 
