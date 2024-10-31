@@ -1,8 +1,8 @@
-function soln = secant_method(x_0, x_1, fn, opts)
+function soln = secant_method(fn, x_0, x_1, opts)
 arguments
+    fn {mustBeA(fn, "function_handle")}
     x_0 {mustBeNumeric}
     x_1 {mustBeNumeric}
-    fn {mustBeA(fn, "function_handle")}
     opts.Tol {mustBeFloat} = 1e-6
     opts.MaxIter {mustBeInteger} = 1000
 end

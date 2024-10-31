@@ -1,8 +1,8 @@
-function avg = bisection_method(a, b, fn, opts)
+function avg = bisection_method(fn, a, b, opts)
 arguments
+    fn {mustBeA(fn, "function_handle")}
     a (1, 1) {mustBeNumeric}
     b (1, 1) {mustBeNumeric}
-    fn {mustBeA(fn, "function_handle")}
     opts.Tol (1, 1) {mustBeFloat} = 1e-6
     opts.MaxIter (1, 1) {mustBeInteger} = 10000
 end

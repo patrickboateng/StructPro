@@ -1,8 +1,8 @@
-function soln = newtons_method(x0, fn, diff_fn, opts)
+function soln = newtons_method(fn, diff_fn, x0, opts)
 arguments
-    x0 {mustBeNumeric}
     fn {mustBeA(fn, "function_handle")}
     diff_fn {mustBeA(diff_fn, "function_handle")}
+    x0 {mustBeNumeric}
     opts.Tol {mustBeFloat} = 1e-6
     opts.MaxIter {mustBeInteger} = 1000
 end

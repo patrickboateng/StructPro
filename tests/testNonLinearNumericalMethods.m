@@ -6,7 +6,7 @@ function testBisectionMethod(testcase)
 fn = testcase.TestData.fn;
 tol = testcase.TestData.tol;
 expected = testcase.TestData.expected;
-res = bisection_method(30, 40, fn);
+res = bisection_method(fn, 30, 40);
 verifyTrue(testcase, abs(res - expected) < tol)
 end
 
@@ -15,7 +15,7 @@ fn = testcase.TestData.fn;
 diff_fn = testcase.TestData.diff_fn;
 tol = testcase.TestData.tol;
 expected = testcase.TestData.expected;
-res = newtons_method(30, fn, diff_fn);
+res = newtons_method(fn, diff_fn, 30);
 verifyTrue(testcase, abs(res - expected) < tol)
 end
 
@@ -23,14 +23,14 @@ function testSecantMethod(testcase)
 fn = testcase.TestData.fn;
 tol = testcase.TestData.tol;
 expected = testcase.TestData.expected;
-res = secant_method(30, 40, fn);
+res = secant_method(fn, 30, 40);
 
 verifyTrue(testcase, abs(res - expected) < tol)
 
 fn = @(t) (300000 / (1 + 30.003*exp(-0.08*t))) - 90000 * exp(-0.045*t) ...
     - 120000;
 expected = 39.9878;
-res = secant_method(30, 40, fn, Tol=0.05);
+res = secant_method(fn, 30, 40, Tol=0.05);
 
 verifyTrue(testcase, abs(res - expected) < tol)
 end
