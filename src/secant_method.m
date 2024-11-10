@@ -20,6 +20,7 @@ while idx < opts.MaxIter
     end
 
     idx = idx + 1;
+
 end
 soln = x_1;
 end
