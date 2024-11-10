@@ -15,9 +15,12 @@ idx = 1;
 while idx < opts.MaxIter
 
     avg = (a + b) / 2;
+
+
     f_avg = fn(avg);
     
     if ~ (f_a * f_b < 0)
+        warning("Solution values should be of opposite signs.")
         break
     end
     
@@ -32,6 +35,7 @@ while idx < opts.MaxIter
     end     
 
     idx = idx + 1;
+
 end
 avg = (a + b) / 2;
 end
