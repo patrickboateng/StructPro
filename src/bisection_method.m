@@ -16,7 +16,6 @@ while idx < opts.MaxIter
 
     avg = (a + b) / 2;
 
-
     f_avg = fn(avg);
     
     if ~ (f_a * f_b < 0)
