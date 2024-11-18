@@ -13,9 +13,7 @@ classdef Solver
             K = zeros(numDOF);
 
             for i=1:num_of_members
-                mem_k = get_member_stiffness_matrix(beam.members(i));
-                % K(i:4, i:4) = K(i:4, i:4) + mem_k;
-                % break
+                mem_k = beam.members(i).member_stiffness_matrix();
 
                 idx_i = (i-1) * 2 + 1;
                 idx_j = idx_i + 3;
@@ -33,34 +31,24 @@ classdef Solver
                 f_idx = i * 2 - 1;
                 m_idx = f_idx + 1;
                 node = beam.nodes(i);
-                support_type = node.support.type();
+                support = node.support;
                 
                 F_vec(f_idx) = node.point_load.magnitude;
                 F_vec(m_idx) = node.point_moment.magnitude;
-
-                if support_type == SupportType.FIXED
-                    U_vec(f_idx) = 0;
-                    U_vec(m_idx) = 0;
-                end
-
-                if support_type == SupportType.PINNED
-                    U_vec(f_idx) = 0;
-                    U_vec(m_idx) = 1;
-                end
-
-                if support_type == SupportType.FREE
-                    U_vec(f_idx) = 1;
-                    U_vec(m_idx) = 1;
-                end
-
-
-
-
+                
+                U_vec(f_idx) = support.UY;
+                U_vec(m_idx) = support.UZ;
             end
 
-            res = U_vec;
-            
+            freeDOF = find(U_vec);
 
+            K_ff = K(freeDOF, freeDOF);
+
+            F_f = F_vec(freeDOF);
+
+            U_vec(freeDOF) = gauss_elimination(K_ff, F_f);
+            
+            res = K * U_vec - F_vec;
         end
 
     end
