@@ -10,10 +10,14 @@ classdef Solver
             num_of_members = length(beam.members);
             numDOF = num_of_nodes * 2;
 
+            F_vec = zeros(numDOF, 1);
+            U_vec = zeros(numDOF, 1);
+
             K = zeros(numDOF);
 
             for i=1:num_of_members
-                mem_k = beam.members(i).member_stiffness_matrix();
+                mem = beam.members(i);
+                mem_k = mem.stiffness_matrix();
 
                 idx_i = (i-1) * 2 + 1;
                 idx_j = idx_i + 3;
@@ -21,11 +25,12 @@ classdef Solver
                 % Add element stiffness to global stiffness
                 K(idx_i:idx_j, idx_i:idx_j) = K(idx_i:idx_j, idx_i:idx_j)...
                                               + mem_k;
+                L = mem.len();
+
+                member.start_node.point_load = me
+
+
             end
-
-            F_vec = zeros(numDOF, 1);
-
-            U_vec = zeros(numDOF, 1);
 
             for i=1:num_of_nodes
                 f_idx = i * 2 - 1;

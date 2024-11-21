@@ -14,12 +14,12 @@ classdef Member
             obj.section = section;
         end
 
-        function len = member_length(obj)
+        function len = len(obj)
             len = obj.end_node.position.x - obj.start_node.position.x;
         end
 
-        function m_stiffness = member_stiffness_matrix(obj)
-            m_len = obj.member_length();
+        function m_stiffness = stiffness_matrix(obj)
+            m_len = obj.len();
             E = obj.section.E;
             I = obj.section.I;
 
