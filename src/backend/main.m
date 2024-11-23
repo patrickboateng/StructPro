@@ -1,57 +1,47 @@
 clc;clearvars;
 
+section = RectangularSection();
+section.I = 108e-6;
+section.E = 200e9;
+
 node_1 = Node(1, 0, 0, 0, 0, 1, 1, 1);
-node_2 = Node(2, 5, 0, -5, 10, 0, 0, 0);
-node_3 = Node(3, 10, 0, 0, 0, 1, 1, 1);
-% 
-section = RectangularSection(0.2, 0.4, 200e9);
-section.I = 22e-6;
-% 
-member_1 = Member(1, node_1, node_2, section);
-member_2 = Member(1, node_2, node_3, section);
-% 
-beam = Beam(10);
+node_2 = Node(2, 2, 0, -150, 0, 0, 0, 0);
+node_3 = Node(3, 4, 0, 0, 0, 0, 1, 0);
+node_4 = Node(4, 7, 0, 0, 0, 0, 1, 0);
+node_5 = Node(5, 11, 0, 0, 0, 1, 1, 1);
 
-beam.add_node(node_1);
-beam.add_node(node_2);
-beam.add_node(node_3);
+member_1 = Member(1, node_1, node_2, section, 0);
+member_2 = Member(2, node_2, node_3, section, 0);
+member_3 = Member(3, node_3, node_4, section, 0);
+member_4 = Member(4, node_4, node_5, section, -37.5);
 
-% 
-beam.add_member(member_1);
-beam.add_member(member_2);
-% 
+nodes = [node_1, node_2, node_3, node_4, node_5];
+members = [member_1, member_2, member_3, member_4];
 
-% node_1 = Node(1, 0, 0, 0, 0, 1, 1, 0);
-% node_2 = Node(2, 2, 0, 0, 0, 0, 1, 0);
-% node_3 = Node(3, 4, 0, -5, 0, 0, 0, 0);
-% 
-% member_1 = Member(1, node_1, node_2, section);
-% member_2 = Member(2, node_2, node_3, section);
-% 
-% beam = Beam(4);
-% 
-% beam.add_node(node_1);
-% beam.add_node(node_2);
-% beam.add_node(node_3);
-% 
-% beam.add_member(member_1);
-% beam.add_member(member_2);
+beam = Beam(11);
 
-node_1 = Node(1, 0, 0, 0, -4, 10, 1, 0);
-node_2 = Node(2, 2, 0, 0, 0, 1, 1, 0);
-node_3 = Node(3, 4, 0, 0, 4, 0, 1, 0);
+beam.add_nodes(nodes);
+beam.add_members(members);
 
-member_1 = Member(1, node_1, node_2, section);
-member_2 = Member(2, node_2, node_3, section);
+beam = Beam(32);
 
-beam = Beam(4);
+node_1 = Node(1, 0, 0, 0, 0, 1, 1, 1);
+node_2 = Node(2, 24, 0, 0, 0, 0, 1, 0);
+node_3 = Node(3, 28, 0, -12, 0, 0, 0, 0);
+node_4 = Node(4, 32, 0, 0, 0, 0, 1, 0);
 
-beam.add_node(node_1);
-beam.add_node(node_2);
-beam.add_node(node_3);
+beam.add_nodes([node_1, node_2, node_3, node_4]);
 
-beam.add_member(member_1);
-beam.add_member(member_2);
+member_1 = Member(1, node_1, node_2, section, -2);
+member_2 = Member(2, node_2, node_3, section, 0);
+member_3 = Member(3, node_3, node_4, section, 0);
 
-Solver.solve(beam)
+beam.add_members([member_1, member_2, member_3]);
+
+
+Solver.solve(beam).Reactions
+
+Solver.solve(beam).Displacements
+
+Solver.solve(beam).ForceVector
 
