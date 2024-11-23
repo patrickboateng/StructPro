@@ -19,20 +19,34 @@ classdef Beam < handle
 
         function obj = add_node(obj, node)
             obj.nodes(end + 1) = node;
-        end
-
-        function obj = add_point_load(obj, load)
-            obj.point_loads(end + 1) = load;
-        end
-
-        function obj = add_point_moment(obj, moment)
-            obj.point_moments(end + 1) = moment;
-        end
+        end       
 
         function obj = add_member(obj, member)
             obj.members(end + 1) = member;
         end
 
+        function obj = add_nodes(obj, nodes)
+            arguments
+                obj
+                nodes (1, :) Node
+            end
+            
+            for i=1:length(nodes)
+                obj.add_node(nodes(i));
+            end
+        end
+
+        function obj = add_members(obj, members)
+            arguments
+                obj
+                members (1, :) Member
+            end
+            
+            for i=1:length(members)
+                obj.add_member(members(i));
+            end
+        end
+    
     end
 
 end
