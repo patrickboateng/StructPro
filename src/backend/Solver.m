@@ -24,12 +24,20 @@ classdef Solver
 
                 % Add element stiffness to global stiffness
                 K(idx_i:idx_j, idx_i:idx_j) = K(idx_i:idx_j, idx_i:idx_j)...
-                                              + mem_k;
-                L = mem.len();
+                    + mem_k;
 
-                member.start_node.point_load = me
+                fixed_end_forces = mem.fixed_end_forces();
+                fixed_end_moments = mem.fixed_end_moments();
 
+                mem.start_node.fixed_end_force = PointLoad( ...
+                    fixed_end_forces(1), mem.start_node);
+                mem.start_node.fixed_end_moment = PointMoment( ...
+                    fixed_end_moments(1), mem.start_node);
 
+                mem.end_node.fixed_end_force = PointLoad( ...
+                    fixed_end_forces(2), mem.end_node);
+                mem.end_node.fixed_end_moment = PointMoment( ...
+                    fixed_end_moments(2), mem.end_node);
             end
 
             for i=1:num_of_nodes
@@ -37,10 +45,10 @@ classdef Solver
                 m_idx = f_idx + 1;
                 node = beam.nodes(i);
                 support = node.support;
-                
-                F_vec(f_idx) = node.point_load.magnitude;
-                F_vec(m_idx) = node.point_moment.magnitude;
-                
+
+                F_vec(f_idx) = node.point_load.magnitude + node.fixed_end_force.magnitude;
+                F_vec(m_idx) = node.point_moment.magnitude + node.fixed_end_moment.magnitude;
+
                 U_vec(f_idx) = support.UY;
                 U_vec(m_idx) = support.UZ;
             end
@@ -52,8 +60,11 @@ classdef Solver
             F_f = F_vec(freeDOF);
 
             U_vec(freeDOF) = gauss_elimination(K_ff, F_f);
-            
-            res = K * U_vec - F_vec;
+
+            R = K * U_vec - F_vec;
+
+            res = struct("Displacements", U_vec, "Reactions", R, ...
+                "ForceVector", F_vec);
         end
 
     end
