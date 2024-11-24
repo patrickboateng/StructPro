@@ -1,4 +1,4 @@
-classdef Beam < handle
+classdef Beam2D < handle
 
     properties
         total_length (1, 1) {mustBeNumeric}
@@ -9,7 +9,7 @@ classdef Beam < handle
     end
 
     methods
-        function obj = Beam(total_length)
+        function obj = Beam2D(total_length)
             obj.total_length = total_length;
             obj.nodes = Node.empty();
             obj.point_loads = PointLoad.empty();
