@@ -2,11 +2,15 @@ classdef Node < handle
     properties 
         id {mustBeInteger}
         position Point2D
-        support  Support
+        support  Support2D
         point_load PointLoad
         point_moment PointMoment
         fixed_end_force PointLoad
         fixed_end_moment PointMoment
+        reaction_force PointLoad
+        reaction_moment PointMoment
+        displacement double
+        rotation double
     end
 
     methods
@@ -24,12 +28,16 @@ classdef Node < handle
             end
             obj.id = id;
             obj.position = Point2D(x, y);
-            obj.support = Support(rx, ry, rm);
+            obj.support = Support2D(rx, ry, rm);
             obj.point_load = PointLoad(point_load, obj);
             obj.point_moment = PointMoment(point_moment, obj);
 
             obj.fixed_end_force = PointLoad(0, obj);
             obj.fixed_end_moment = PointMoment(0, obj);
+            obj.reaction_force = PointLoad(0, obj);
+            obj.reaction_moment = PointMoment(0, obj);
+            obj.displacement = 0;
+            obj.rotation = 0;
         end
 
     end
