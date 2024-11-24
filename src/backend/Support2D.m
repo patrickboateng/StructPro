@@ -1,4 +1,4 @@
-classdef Support
+classdef Support2D
     properties (Access = private)
         RX {mustBeNumericOrLogical}
         RY {mustBeNumericOrLogical}
@@ -13,7 +13,7 @@ classdef Support
     end
 
     methods
-        function obj = Support(rx, ry, rm)
+        function obj = Support2D(rx, ry, rm)
             obj.RX = rx;
             obj.RY = ry;
             obj.RM = rm;
