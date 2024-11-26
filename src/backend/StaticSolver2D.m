@@ -13,6 +13,7 @@ classdef StaticSolver2D
             ext_force_vec = zeros(numDOF, 1);
             disp_vec = zeros(numDOF, 1);
 
+            % Global stiffness matrix
             K = zeros(numDOF);
 
             for i=1:num_of_members
@@ -33,6 +34,7 @@ classdef StaticSolver2D
                     fixed_end_forces(1), mem.start_node);
                 mem.start_node.fixed_end_moment = PointMoment( ...
                     fixed_end_moments(1), mem.start_node);
+
 
                 mem.end_node.fixed_end_force = PointLoad( ...
                     fixed_end_forces(2), mem.end_node);
@@ -63,7 +65,7 @@ classdef StaticSolver2D
             disp_vec(freeDOF) = gauss_elimination(K_ff, F_f);
 
             reaction_forces = K * disp_vec - ext_force_vec;
-            
+
             % coverting displacements/rotations to mm
             disp_vec = disp_vec .* 1000;
 
@@ -76,7 +78,7 @@ classdef StaticSolver2D
                 node.displacement = disp_vec(frc_idx);
                 node.rotation = disp_vec(mom_idx);
             end
-           
+
             res = beam;
 
         end
