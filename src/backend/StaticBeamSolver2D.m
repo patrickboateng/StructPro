@@ -1,4 +1,4 @@
-classdef StaticSolver2D
+classdef StaticBeamSolver2D
 
     methods (Static)
         function res = solve(beam)
