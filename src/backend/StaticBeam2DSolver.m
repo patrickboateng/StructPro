@@ -1,4 +1,4 @@
-classdef StaticBeamSolver2D
+classdef StaticBeam2DSolver
 
     methods (Static)
         function res = solve(beam)
@@ -49,7 +49,7 @@ classdef StaticBeamSolver2D
                 node = beam.nodes(i);
                 support = node.support;
 
-                ext_force_vec(frc_idx) = node.point_load.magnitude + node.fixed_end_force.magnitude;
+                ext_force_vec(frc_idx) = node.ver_point_load.magnitude + node.fixed_end_force.magnitude;
                 ext_force_vec(mom_idx) = node.point_moment.magnitude + node.fixed_end_moment.magnitude;
 
                 disp_vec(frc_idx) = support.UY;
