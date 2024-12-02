@@ -3,8 +3,6 @@ classdef Beam2D < handle
     properties
         total_length (1, 1) {mustBeNumeric}
         nodes (1, :) Node
-        point_loads (1, :) PointLoad
-        point_moments (1, :) PointMoment
         members (1, :) Member
     end
 
@@ -12,8 +10,6 @@ classdef Beam2D < handle
         function obj = Beam2D(total_length)
             obj.total_length = total_length;
             obj.nodes = Node.empty();
-            obj.point_loads = PointLoad.empty();
-            obj.point_moments = PointMoment.empty();
             obj.members = Member.empty();
         end
 
