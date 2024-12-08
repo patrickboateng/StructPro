@@ -2,15 +2,15 @@ classdef Beam2D < handle
 
     properties
         total_length (1, 1) {mustBeNumeric}
-        nodes (1, :) Node
-        members (1, :) Member
+        nodes (1, :) BmNode
+        members (1, :) BmMember
     end
 
     methods
         function obj = Beam2D(total_length)
             obj.total_length = total_length;
-            obj.nodes = Node.empty();
-            obj.members = Member.empty();
+            obj.nodes = BmNode.empty();
+            obj.members = BmMember.empty();
         end
 
         function obj = add_node(obj, node)
@@ -24,7 +24,7 @@ classdef Beam2D < handle
         function obj = add_nodes(obj, nodes)
             arguments
                 obj
-                nodes (1, :) Node
+                nodes (1, :) BmNode
             end
             
             for i=1:length(nodes)
@@ -35,7 +35,7 @@ classdef Beam2D < handle
         function obj = add_members(obj, members)
             arguments
                 obj
-                members (1, :) Member
+                members (1, :) BmMember
             end
             
             for i=1:length(members)
