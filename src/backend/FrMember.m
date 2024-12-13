@@ -1,27 +1,25 @@
-classdef FrameMember < handle
+classdef FrMember < handle
 
     properties
         id {mustBeNumeric}
-        start_node Node
-        end_node Node
+        start_node 
+        end_node 
         section RectangularSection
         distributed_load UniformDistributedLoad
     end
 
     methods
-        function obj = FrameMember(id, start_node, end_node, section, distributed_load)
+        function obj = FrMember(id, start_node, end_node, section)
             arguments
                 id
                 start_node
                 end_node
                 section
-                distributed_load
             end
             obj.id = id;
             obj.start_node = start_node;
             obj.end_node = end_node;
             obj.section = section;
-            obj.distributed_load = UniformDistributedLoad(distributed_load, 1, 1);
         end
 
         function len = len(obj)
