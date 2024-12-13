@@ -1,4 +1,4 @@
-classdef Node < handle
+classdef FrNode < handle
     properties 
         id {mustBeInteger}
         position Point2D
@@ -8,14 +8,10 @@ classdef Node < handle
         point_moment PointMoment
         fixed_end_force PointLoad
         fixed_end_moment PointMoment
-        reaction_force PointLoad
-        reaction_moment PointMoment
-        displacement double
-        rotation double
     end
 
     methods
-        function obj = Node(id, x, y, ...
+        function obj = FrNode(id, x, y, ...
                             lat_point_load, ver_point_load, ...
                             point_moment, rx, ry, rm)
             arguments
@@ -37,10 +33,6 @@ classdef Node < handle
             obj.point_moment = PointMoment(point_moment, obj);
             obj.fixed_end_force = PointLoad(0, obj);
             obj.fixed_end_moment = PointMoment(0, obj);
-            obj.reaction_force = PointLoad(0, obj);
-            obj.reaction_moment = PointMoment(0, obj);
-            obj.displacement = 0;
-            obj.rotation = 0;
         end
 
     end
