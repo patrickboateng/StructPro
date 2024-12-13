@@ -4,7 +4,6 @@ classdef BmMember
         start_node BmNode
         end_node BmNode
         section RectangularSection
-        distributed_load UniformDistributedLoad
     end
 
     methods
