@@ -1,14 +1,14 @@
 classdef Frame2D < handle
 
     properties
-        nodes (1, :) Node
-        members (1, :) FrameMember
+        nodes (1, :) FrNode
+        members (1, :) FrMember
     end
 
     methods
         function obj = Frame2D()
-            obj.nodes = Node.empty();
-            obj.members = FrameMember.empty();
+            obj.nodes = FrNode.empty();
+            obj.members = FrMember.empty();
         end
 
         function obj = add_node(obj, node)
@@ -22,7 +22,7 @@ classdef Frame2D < handle
         function obj = add_nodes(obj, nodes)
             arguments
                 obj
-                nodes (1, :) Node
+                nodes (1, :) FrNode
             end
 
             for i=1:length(nodes)
@@ -33,7 +33,7 @@ classdef Frame2D < handle
         function obj = add_members(obj, members)
             arguments
                 obj
-                members (1, :) FrameMember
+                members (1, :) FrMember
             end
 
             for i=1:length(members)
