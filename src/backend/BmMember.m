@@ -1,6 +1,6 @@
 classdef BmMember
     properties
-        id {mustBeNumeric}
+        id {mustBePositive, mustBeInteger}
         start_node BmNode
         end_node BmNode
         section RectangularSection
@@ -24,19 +24,19 @@ classdef BmMember
             len = obj.end_node.position.x - obj.start_node.position.x;
         end
 
-        function m_stiffness = stiffness_matrix(obj)
-            m_len = obj.len();
+        function k_local = stiffness_matrix(obj)
+            L = obj.len();
             E = obj.section.E;
             I = obj.section.I;
 
-            k = (E * I) / m_len^3;
+            k = (E * I) / L^3;
 
-            m_stiffness = [12 6*m_len -12 6*m_len; ...
-                6*m_len 4*m_len^2 -6*m_len 2*m_len^2; ...
-                -12 -6*m_len 12 -6*m_len; ...
-                6*m_len 2*m_len^2 -6*m_len 4*m_len^2];
+            k_local = [12   6*L    -12    6*L; ...
+                       6*L  4*L^2  -6*L   2*L^2; ...
+                       -12  -6*L     12   -6*L; ...
+                       6*L  2*L^2  -6*L   4*L^2];
 
-            m_stiffness = m_stiffness .* k;
+            k_local = k_local .* k;
         end
     end
 end
