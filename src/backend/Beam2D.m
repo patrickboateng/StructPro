@@ -8,8 +8,11 @@ classdef Beam2D < handle
         point_moments (1, :) PointMoment
         distributed_loads (1, :) UniformDistributedLoad
 
-        soln
         is_solved
+    end
+
+    properties (Access=private)
+        DIV = 10000;
     end
 
     methods
@@ -69,7 +72,7 @@ classdef Beam2D < handle
         end
 
         function [x, shear_force] = calc_shear_force(obj)
-            x = linspace(0, obj.total_length, 10000);
+            x = linspace(0, obj.total_length, obj.DIV);
             num_of_nodes = length(obj.nodes);
 
             num_of_dist_loads = length(obj.distributed_loads);
@@ -113,7 +116,7 @@ classdef Beam2D < handle
 
         function [x, bending_moment] = calc_bending_moment(obj)
 
-            x = linspace(0, obj.total_length, 10000);
+            x = linspace(0, obj.total_length, obj.DIV);
 
             num_of_nodes = length(obj.nodes);
             num_of_dist_loads = length(obj.distributed_loads);
@@ -146,7 +149,6 @@ classdef Beam2D < handle
                     x_end = distributed_load.end_position.x;
 
                     if current_x > x_start && current_x <= x_end
-                        % Assuming constant distributed load for this element
                         w = distributed_load.magnitude; % Custom function to get w
                         length_covered = current_x - x_start;
                         M = M + w * length_covered * (length_covered / 2);
