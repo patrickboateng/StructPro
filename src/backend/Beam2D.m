@@ -62,15 +62,6 @@ classdef Beam2D < handle
             end
         end
 
-        function reactions = get_reactions(obj)
-            reactions = zeros(size(obj.nodes));
-
-            for i=1:length(obj.nodes)
-                frc_idx = i * 2 - 1;
-                reactions(i) = obj.soln.Reactions(frc_idx);
-            end
-        end
-
         function [x, shear_force] = calc_shear_force(obj)
             x = linspace(0, obj.total_length, obj.DIV);
             num_of_nodes = length(obj.nodes);
@@ -130,7 +121,8 @@ classdef Beam2D < handle
             for i = 1:length(x)
                 current_x = x(i);
                 M = 0;
-
+                
+                % Add moments from concentrated loads and reactions
                 for j = 1:num_of_nodes
                     node = obj.nodes(j);
                     if node.position.x <= current_x
@@ -149,18 +141,13 @@ classdef Beam2D < handle
                     x_end = distributed_load.end_position.x;
 
                     if current_x > x_start && current_x <= x_end
-                        w = distributed_load.magnitude; % Custom function to get w
+                        w = distributed_load.magnitude;
                         length_covered = current_x - x_start;
                         M = M + w * length_covered * (length_covered / 2);
                     end
                 end
-
                 bending_moment(i) = M;
             end
         end
-
-
-
     end
-
 end
