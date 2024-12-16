@@ -69,7 +69,7 @@ classdef Beam2D < handle
         end
 
         function [x, shear_force] = calc_shear_force(obj)
-            x = linspace(0, obj.total_length, 1000);
+            x = linspace(0, obj.total_length, 10000);
             num_of_nodes = length(obj.nodes);
 
             num_of_dist_loads = length(obj.distributed_loads);
@@ -80,17 +80,16 @@ classdef Beam2D < handle
                 StaticBeam2DSolver.solve(obj);
             end
 
-            reactions = obj.get_reactions();
-
             for i = 1:length(x)
                 current_x = x(i);
                 V = 0;
 
                 % Add contribution from point loads
                 for j = 1:num_of_nodes
-                    if obj.nodes(j).position.x <= current_x
-                        V = V + reactions(j);
-                        V = V + obj.point_loads(j).magnitude;
+                    node = obj.nodes(j);
+                    if node.position.x <= current_x
+                        V = V + node.reaction_force.magnitude;
+                        V = V + node.point_load.magnitude;
                     end
                 end
 
@@ -102,14 +101,63 @@ classdef Beam2D < handle
 
                     if current_x > x_start && current_x <= x_end
                         w = distributed_load.magnitude;
-                        lengthCovered = current_x - x_start;
-                        V = V + w * lengthCovered;
+                        length_covered = current_x - x_start;
+                        V = V + w * length_covered;
                     end
                 end
 
-                shear_force(i) = V; 
+                shear_force(i) = V;
+
             end
         end
+
+        function [x, bending_moment] = calc_bending_moment(obj)
+
+            x = linspace(0, obj.total_length, 10000);
+
+            num_of_nodes = length(obj.nodes);
+            num_of_dist_loads = length(obj.distributed_loads);
+
+            bending_moment = zeros(size(x));
+
+            if ~obj.is_solved
+                StaticBeam2DSolver.solve(obj);
+            end
+
+            for i = 1:length(x)
+                current_x = x(i);
+                M = 0;
+
+                for j = 1:num_of_nodes
+                    node = obj.nodes(j);
+                    if node.position.x <= current_x
+                        moment_arm = current_x - node.position.x;
+                        M = M + node.reaction_force.magnitude * moment_arm;
+                        M = M + node.point_load.magnitude * moment_arm;
+                        M = M - node.point_moment.magnitude;
+                        M = M - node.reaction_moment.magnitude;
+                    end
+                end
+
+                % Add moments from distributed loads
+                for k = 1:num_of_dist_loads
+                    distributed_load = obj.distributed_loads(k);
+                    x_start = distributed_load.start_position.x;
+                    x_end = distributed_load.end_position.x;
+
+                    if current_x > x_start && current_x <= x_end
+                        % Assuming constant distributed load for this element
+                        w = distributed_load.magnitude; % Custom function to get w
+                        length_covered = current_x - x_start;
+                        M = M + w * length_covered * (length_covered / 2);
+                    end
+                end
+
+                bending_moment(i) = M;
+            end
+        end
+
+
 
     end
 
