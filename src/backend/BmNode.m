@@ -7,6 +7,8 @@ classdef BmNode < handle
         point_moment PointMoment
         fixed_end_force PointLoad
         fixed_end_moment PointMoment
+        reaction_force PointLoad
+        reaction_moment PointMoment
     end
 
     methods
@@ -31,6 +33,9 @@ classdef BmNode < handle
             obj.point_moment = PointMoment(point_moment, obj);
             obj.fixed_end_force = PointLoad(0, obj);
             obj.fixed_end_moment = PointMoment(0, obj);
+
+            obj.reaction_force = PointLoad(0, obj);
+            obj.reaction_moment = PointMoment(0, obj);
         end
     end
 end
