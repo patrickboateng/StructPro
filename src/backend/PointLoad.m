@@ -1,5 +1,5 @@
 classdef PointLoad < handle
-    properties
+    properties 
         magnitude {mustBeNumeric}
         position Point2D
         direction LoadDirection
