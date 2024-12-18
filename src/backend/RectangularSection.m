@@ -1,10 +1,4 @@
-classdef RectangularSection
-    properties
-        I {mustBePositive, mustBeNumeric}
-        E {mustBePositive, mustBeNumeric}
-        A {mustBePositive, mustBeNumeric}
-    end
-
+classdef RectangularSection < Section
     methods
         function obj = RectangularSection(b, d, E)  
             arguments
@@ -12,9 +6,9 @@ classdef RectangularSection
                 d {mustBePositive, mustBeNumeric}
                 E {mustBePositive, mustBeNumeric}
             end
-            obj.I = (b * d^3) / 12;
-            obj.A = b * d;
-            obj.E = E;
+            I = (b * d^3) / 12;
+            A = b * d;
+            obj@Section(I, A, E);
         end
     end
 end
