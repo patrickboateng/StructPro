@@ -64,17 +64,15 @@ classdef Beam2D < handle
 
         function [x, shear_force] = calc_shear_force(obj)
             x = linspace(0, obj.total_length, obj.DIV);
-            num_of_nodes = length(obj.nodes);
-
-            num_of_dist_loads = length(obj.distributed_loads);
-
+            num_of_nodes = numel(obj.nodes);
+            num_of_dist_loads = numel(obj.distributed_loads);
             shear_force = zeros(size(x));
 
             if ~obj.is_solved
                 StaticBeam2DSolver.solve(obj);
             end
 
-            for i = 1:length(x)
+            for i = 1:numel(x)
                 current_x = x(i);
                 V = 0;
 
@@ -82,8 +80,8 @@ classdef Beam2D < handle
                 for j = 1:num_of_nodes
                     node = obj.nodes(j);
                     if node.position.x <= current_x
-                        V = V + node.reaction_force.magnitude;
-                        V = V + node.point_load.magnitude;
+                        V = V + double(node.reaction_force);
+                        V = V + double(node.point_load);
                     end
                 end
 
@@ -106,19 +104,16 @@ classdef Beam2D < handle
         end
 
         function [x, bending_moment] = calc_bending_moment(obj)
-
             x = linspace(0, obj.total_length, obj.DIV);
-
-            num_of_nodes = length(obj.nodes);
-            num_of_dist_loads = length(obj.distributed_loads);
-
+            num_of_nodes = numel(obj.nodes);
+            num_of_dist_loads = numel(obj.distributed_loads);
             bending_moment = zeros(size(x));
 
             if ~obj.is_solved
                 StaticBeam2DSolver.solve(obj);
             end
 
-            for i = 1:length(x)
+            for i = 1:numel(x)
                 current_x = x(i);
                 M = 0;
                 
@@ -128,9 +123,9 @@ classdef Beam2D < handle
                     if node.position.x <= current_x
                         moment_arm = current_x - node.position.x;
                         M = M + node.reaction_force.magnitude * moment_arm;
-                        M = M + node.point_load.magnitude * moment_arm;
-                        M = M - node.point_moment.magnitude;
-                        M = M - node.reaction_moment.magnitude;
+                        M = M + double(node.point_load) * moment_arm;
+                        M = M - double(node.point_moment);
+                        M = M - double(node.reaction_moment);
                     end
                 end
 
