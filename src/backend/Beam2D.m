@@ -12,7 +12,7 @@ classdef Beam2D < handle
     end
 
     properties (Access=private)
-        DIV = 10000;
+        DIV = 100000;
     end
 
     methods
@@ -104,45 +104,10 @@ classdef Beam2D < handle
         end
 
         function [x, bending_moment] = calc_bending_moment(obj)
-            x = linspace(0, obj.total_length, obj.DIV);
-            num_of_nodes = numel(obj.nodes);
-            num_of_dist_loads = numel(obj.distributed_loads);
-            bending_moment = zeros(size(x));
-
-            if ~obj.is_solved
-                StaticBeam2DSolver.solve(obj);
-            end
-
-            for i = 1:numel(x)
-                current_x = x(i);
-                M = 0;
-                
-                % Add moments from concentrated loads and reactions
-                for j = 1:num_of_nodes
-                    node = obj.nodes(j);
-                    if node.position.x <= current_x
-                        moment_arm = current_x - node.position.x;
-                        M = M + node.reaction_force.magnitude * moment_arm;
-                        M = M + double(node.point_load) * moment_arm;
-                        M = M - double(node.point_moment);
-                        M = M - double(node.reaction_moment);
-                    end
-                end
-
-                % Add moments from distributed loads
-                for k = 1:num_of_dist_loads
-                    distributed_load = obj.distributed_loads(k);
-                    x_start = distributed_load.start_position.x;
-                    x_end = distributed_load.end_position.x;
-
-                    if current_x > x_start && current_x <= x_end
-                        w = distributed_load.magnitude;
-                        length_covered = current_x - x_start;
-                        M = M + w * length_covered * (length_covered / 2);
-                    end
-                end
-                bending_moment(i) = M;
-            end
+            node = obj.nodes(1);
+            [x, shear_force] = obj.calc_shear_force();
+            bending_moment = cumtrapz(x, shear_force);
+            bending_moment = bending_moment - double(node.reaction_moment);
         end
     end
 end
