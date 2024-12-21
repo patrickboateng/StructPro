@@ -1,18 +1,15 @@
 classdef Beam2D < handle
-
-    properties
+    properties (Access=private)
         total_length (1, 1) {mustBeNumeric}
         nodes (1, :) BmNode
         members (1, :) BmMember
         point_loads (1, :) PointLoad
         point_moments (1, :) PointMoment
         distributed_loads (1, :) UniformDistributedLoad
-
-        is_solved
     end
 
-    properties (Access=private)
-        DIV = 100000;
+    properties
+        is_solved
     end
 
     methods
@@ -32,8 +29,8 @@ classdef Beam2D < handle
 
         function obj = add_node(obj, node)
             obj.nodes(end + 1) = node;
-            obj.point_loads(end + 1) = node.point_load;
-            obj.point_moments(end + 1) = node.point_moment;
+            obj.point_loads(end + 1) = node.getPointLoad();
+            obj.point_moments(end + 1) = node.getPointMoment();
         end
 
         function obj = add_member(obj, member)
@@ -62,14 +59,38 @@ classdef Beam2D < handle
             end
         end
 
+        function len = getLength(obj)
+            len = obj.total_length;
+        end
+
+        function nodes = getNodes(obj)
+            nodes = obj.nodes;
+        end
+
+        function members = getMembers(obj)
+            members = obj.members;
+        end
+
+        function pointloads = getPointLoads(obj)
+            pointloads = obj.point_loads;
+        end
+
+        function pointmoments = getPointMoments(obj)
+            pointmoments = obj.point_moments();
+        end
+
+        function distributedloads = getDistributedLoads(obj)
+            distributedloads = obj.distributed_loads;
+        end
+
         function [x, shear_force] = calc_shear_force(obj)
-            x = linspace(0, obj.total_length, obj.DIV);
+            x = linspace(0, obj.total_length, 10000);
             num_of_nodes = numel(obj.nodes);
             num_of_dist_loads = numel(obj.distributed_loads);
             shear_force = zeros(size(x));
 
             if ~obj.is_solved
-                StaticBeam2DSolver.solve(obj);
+                obj.solve();
             end
 
             for i = 1:numel(x)
@@ -79,9 +100,9 @@ classdef Beam2D < handle
                 % Add contribution from point loads
                 for j = 1:num_of_nodes
                     node = obj.nodes(j);
-                    if node.position.x <= current_x
-                        V = V + double(node.reaction_force);
-                        V = V + double(node.point_load);
+                    if node.getPosition().x <= current_x
+                        V = V + double(node.getReactionForce());
+                        V = V + double(node.getPointLoad());
                     end
                 end
 
@@ -107,7 +128,88 @@ classdef Beam2D < handle
             node = obj.nodes(1);
             [x, shear_force] = obj.calc_shear_force();
             bending_moment = cumtrapz(x, shear_force);
-            bending_moment = bending_moment - double(node.reaction_moment);
+            bending_moment = bending_moment - double(node.getReactionMoment());
+        end
+
+        function [x, slope] = calc_slope(obj)
+            member = obj.members(1);
+            node = obj.nodes(1);
+            E = member.getSection.getE();
+            I = member.getSection.getI();
+            [x, bending_moment] = obj.calc_bending_moment();
+            slope = cumtrapz(x, bending_moment ./ (E * I));
+            slope = slope - node.getRotation();
+        end
+
+        function [x, deflection] = calc_deflection(obj)
+            node = obj.nodes(1);
+            [x, slope] = obj.calc_slope();
+            deflection = cumtrapz(x, slope);
+            deflection = deflection - node.getDisplacement();
+        end
+
+        function solve(obj)            
+            num_of_nodes = numel(obj.getNodes());
+            num_of_elements = num_of_nodes - 1;
+            numDOF = num_of_nodes * 2;
+
+            ext_force_vec = zeros(numDOF, 1);
+            disp_vec = zeros(numDOF, 1);
+
+            % Global stiffness matrix
+            G_K = zeros(numDOF);
+
+            for i=1:num_of_elements
+                mem = obj.members(i);
+                % Local stiffness matrix
+                L_k = mem.stiffness_matrix();
+
+                % Local stiffness matrix location in Global stiffness
+                % matrix
+                idx_i = (i-1) * 2 + 1;
+                idx_j = idx_i + 3;
+
+                % Add element stiffness to global stiffness
+                G_K(idx_i:idx_j, idx_i:idx_j) = G_K(idx_i:idx_j, ...
+                    idx_i:idx_j) + L_k;
+            end
+
+            % Building the force vector
+            for i=1:num_of_nodes
+                frc_idx = i * 2 - 1;
+                mom_idx = frc_idx + 1;
+                node = obj.nodes(i);
+                support = node.getSupport();
+
+                ext_force_vec(frc_idx) = node.getPointLoad() + ...
+                    node.getFixedEndForce();
+                ext_force_vec(mom_idx) = node.getPointMoment() + ...
+                    node.getFixedEndMoment();
+
+                disp_vec(frc_idx) = support.UY;
+                disp_vec(mom_idx) = support.UZ;
+            end
+
+            freeDOF = find(disp_vec);
+
+            K_ff = G_K(freeDOF, freeDOF);
+
+            F_f = ext_force_vec(freeDOF);
+
+            disp_vec(freeDOF) = K_ff \ F_f;
+
+            reaction_forces = G_K * disp_vec - ext_force_vec;
+
+            for i=1:num_of_nodes
+                frc_idx = i * 2 - 1;
+                mom_idx = frc_idx + 1;
+                node = obj.nodes(i);
+                node.setReactionForce(PointLoad(reaction_forces(frc_idx), node));                
+                node.setReactionMoment(PointMoment(reaction_forces(mom_idx), node));
+                node.setDisplacement(disp_vec(frc_idx));
+                node.setRotation(disp_vec(mom_idx));
+            end
+            obj.is_solved = true;
         end
     end
 end
