@@ -1,13 +1,13 @@
 classdef BmMember < Member
     methods
         function len = len(obj)
-            len = obj.end_node.position.x - obj.start_node.position.x;
+            len = obj.end_node.getPosition.x - obj.start_node.getPosition.x;
         end
 
         function k_local = stiffness_matrix(obj)
             L = obj.len();
-            E = obj.section.E;
-            I = obj.section.I;
+            E = obj.section.getE();
+            I = obj.section.getI();
 
             k = (E * I) / L^3;
 
