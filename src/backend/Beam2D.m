@@ -43,7 +43,7 @@ classdef Beam2D < handle
                 nodes (1, :) BmNode
             end
 
-            for i=1:length(nodes)
+            for i=1:numel(nodes)
                 obj.add_node(nodes(i));
             end
         end
@@ -54,7 +54,7 @@ classdef Beam2D < handle
                 members (1, :) BmMember
             end
 
-            for i=1:length(members)
+            for i=1:numel(members)
                 obj.add_member(members(i));
             end
         end
@@ -71,20 +71,20 @@ classdef Beam2D < handle
             members = obj.members;
         end
 
-        function pointloads = getPointLoads(obj)
-            pointloads = obj.point_loads;
+        function point_loads = getPointLoads(obj)
+            point_loads = obj.point_loads;
         end
 
-        function pointmoments = getPointMoments(obj)
-            pointmoments = obj.point_moments();
+        function point_moments = getPointMoments(obj)
+            point_moments = obj.point_moments();
         end
 
-        function distributedloads = getDistributedLoads(obj)
-            distributedloads = obj.distributed_loads;
+        function distributed_loads = getDistributedLoads(obj)
+            distributed_loads = obj.distributed_loads;
         end
 
         function [x, shear_force] = calc_shear_force(obj)
-            x = linspace(0, obj.total_length, 10000);
+            x = linspace(0, obj.total_length, 1000);
             num_of_nodes = numel(obj.nodes);
             num_of_dist_loads = numel(obj.distributed_loads);
             shear_force = zeros(size(x));
@@ -109,11 +109,11 @@ classdef Beam2D < handle
                 % Add contribution from distributed loads
                 for k = 1:num_of_dist_loads
                     distributed_load = obj.distributed_loads(k);
-                    x_start = distributed_load.start_position.x;
-                    x_end = distributed_load.end_position.x;
+                    x_start = distributed_load.getStartPosition().x;
+                    x_end = distributed_load.getEndPosition().x;
 
                     if current_x > x_start && current_x <= x_end
-                        w = distributed_load.magnitude;
+                        w = distributed_load.getMagnitude();
                         length_covered = current_x - x_start;
                         V = V + w * length_covered;
                     end
@@ -134,18 +134,18 @@ classdef Beam2D < handle
         function [x, slope] = calc_slope(obj)
             member = obj.members(1);
             node = obj.nodes(1);
-            E = member.getSection.getE();
-            I = member.getSection.getI();
+            E = member.getSection().getE();
+            I = member.getSection().getI();
             [x, bending_moment] = obj.calc_bending_moment();
             slope = cumtrapz(x, bending_moment ./ (E * I));
-            slope = slope - node.getRotation();
+            slope = slope + node.getRotation();
         end
 
         function [x, deflection] = calc_deflection(obj)
             node = obj.nodes(1);
             [x, slope] = obj.calc_slope();
             deflection = cumtrapz(x, slope);
-            deflection = deflection - node.getDisplacement();
+            deflection = deflection + node.getDisplacement();
         end
 
         function solve(obj)            
