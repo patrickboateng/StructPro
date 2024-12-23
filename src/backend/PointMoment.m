@@ -1,20 +1,21 @@
-classdef PointMoment
-    
-    properties
-        magnitude (1, 1) {mustBeNumeric}
-        position Point2D
-    end
+classdef PointMoment < ConcentratedLoad
 
     methods
-        function obj = PointMoment(magnitude, node)
-            arguments
-                magnitude (1, 1) {mustBeNumeric}
-                node (1, 1) 
+        function obj = plus(obj, other)
+            check(obj, other)
+            obj.magnitude = double(obj) + double(other);
+        end
+
+        function obj = minus(obj, other)
+            check(obj, other)
+            obj.magnitude = double(obj) - double(other);
+        end
+
+        function check(obj, other)
+            if ~(isa(other, "PointMoment") && obj.position == other.position)
+                error("other must be a PointMoment and have the " + ...
+                    "position as obj")
             end
-            obj.magnitude = magnitude;
-            obj.position = node.position;
         end
     end
-
-
 end
