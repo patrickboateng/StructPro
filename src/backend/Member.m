@@ -1,5 +1,5 @@
 classdef Member < handle
-    properties
+    properties (Access=protected)
         id {mustBePositive, mustBeInteger}
         start_node BmNode
         end_node BmNode
@@ -18,6 +18,22 @@ classdef Member < handle
             obj.start_node = start_node;
             obj.end_node = end_node;
             obj.section = section;
+        end
+
+        function id = getId(obj)
+            id = obj.id;
+        end
+
+        function start_node = getStartNode(obj)
+            start_node = obj.start_node;
+        end
+
+        function end_node = getEndNode(obj)
+            end_node = obj.end_node;
+        end
+
+        function section = getSection(obj)
+            section = obj.section;
         end
     end
 

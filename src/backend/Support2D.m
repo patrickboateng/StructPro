@@ -9,7 +9,6 @@ classdef Support2D
         UX {mustBeNumericOrLogical}
         UY {mustBeNumericOrLogical}
         UZ {mustBeNumericOrLogical}
-        Type SupportType
     end
 
     methods
@@ -21,9 +20,10 @@ classdef Support2D
             obj.UX = 1 - rx;
             obj.UY = 1 - ry;
             obj.UZ = 1 - rm;
+        end
 
-            obj.Type = obj.type();
-    
+        function support_type = getType(obj)
+            support_type = obj.type();
         end
 
     end
