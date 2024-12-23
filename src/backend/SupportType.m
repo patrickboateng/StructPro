@@ -5,5 +5,4 @@ classdef SupportType
         ROLLER
         FREE
     end
-
 end
