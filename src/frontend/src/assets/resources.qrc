@@ -1,0 +1,28 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="file">
+        <file alias="exit.png">./imgs/file/exit.png</file>
+        <file alias="new.png">./imgs/file/new.png</file>
+        <file alias="open.png">./imgs/file/open.png</file>
+        <file alias="save.png">./imgs/file/save.png</file>
+        <file alias="save_as.png">./imgs/file/save_as.png</file>
+    </qresource>
+    <qresource prefix="edit">
+        <file alias="redo.png">./imgs/edit/redo.png</file>
+        <file alias="undo.png">./imgs/edit/undo.png</file>
+    </qresource>
+    <qresource prefix="view">
+        <file alias="diagram.png">./imgs/view/diagram.png</file>
+        <file alias="grid_limits.png">./imgs/view/grid_limits.png</file>
+        <file alias="grid_snap.png">./imgs/view/grid_snap.png</file>
+        <file alias="refresh_view.png">./imgs/view/refresh_view.png</file>
+        <file alias="show_grid.png">./imgs/view/show_grid.png</file>
+        <file alias="zoom_fit.png">./imgs/view/zoom_fit.png</file>
+        <file alias="zoom_in.png">./imgs/view/zoom_in.png</file>
+        <file alias="zoom_out.png">./imgs/view/zoom_out.png</file>
+    </qresource>
+    <qresource prefix="help">
+        <file alias="about.png">./imgs/help/about.png</file>
+        <file alias="check_update.png">./imgs/help/check_update.png</file>
+    </qresource>
+</RCC>
