@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   fill="#000000"
+   width="16"
+   height="16"
+   viewBox="0 0 0.64 0.64"
+   id="icon"
+   version="1.1"
+   sodipodi:docname="y-axis-svgrepo-com.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="23.560798"
+     inkscape:cx="9.0192191"
+     inkscape:cy="10.334964"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="icon">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="0.04"
+       spacingy="0.04"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14902"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <style
+       id="style1">.cls-1{fill:none;}</style>
+  </defs>
+  <title
+     id="title1">y-axis</title>
+  <path
+     id="path1"
+     style="mix-blend-mode:normal;fill-opacity:1;fill-rule:nonzero;stroke-width:0.012874;stroke-dasharray:none;opacity:1;fill:#e0e0e0"
+     d="m 0.11920388,2e-8 -0.10086264,0.11614716 0.02856173,0.0327962 0.05014316,-0.0576993 v 0.4200891 a 0.04376807,0.04292602 0 0 0 0.009477,0.0263323 0.04040129,0.04650319 0 0 0 0.0328525,0.0197317 h 0.39544582 l -0.0533451,0.0522563 0.0309306,0.0303465 0.1092518,-0.10716549 -0.10925182,-0.10723367 -0.0309311,0.0303466 0.0560987,0.0549777 H 0.14078526 V 0.09056354 l 0.0507834,0.05837981 0.0285616,-0.0327962 z" />
+  <rect
+     id="_Transparent_Rectangle_"
+     data-name="&lt;Transparent Rectangle&gt;"
+     class="cls-1"
+     width="32"
+     height="32"
+     x="-14.68"
+     y="-15.68" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>y-axis</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

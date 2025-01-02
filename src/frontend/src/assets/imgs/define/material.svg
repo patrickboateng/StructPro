@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+
+<svg
+   fill="#000000"
+   width="16"
+   height="16"
+   viewBox="0 0 0.64 0.64"
+   id="icon"
+   version="1.1"
+   sodipodi:docname="material.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     showgrid="true"
+     inkscape:zoom="23.560798"
+     inkscape:cx="9.0616625"
+     inkscape:cy="10.292521"
+     inkscape:window-width="1920"
+     inkscape:window-height="1051"
+     inkscape:window-x="-9"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="icon">
+    <inkscape:grid
+       id="grid1"
+       units="px"
+       originx="0"
+       originy="0"
+       spacingx="0.04"
+       spacingy="0.04"
+       empcolor="#0099e5"
+       empopacity="0.30196078"
+       color="#0099e5"
+       opacity="0.14902"
+       empspacing="5"
+       enabled="true"
+       visible="true" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1">
+    <style
+       id="style1">.cls-1{fill:none;}</style>
+  </defs>
+  <title
+     id="title1">y-axis</title>
+  <rect
+     id="_Transparent_Rectangle_"
+     data-name="&lt;Transparent Rectangle&gt;"
+     class="cls-1"
+     width="32"
+     height="32"
+     x="-14.68"
+     y="-15.68" />
+  <metadata
+     id="metadata1">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>y-axis</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="g1"
+     transform="matrix(1.0714279,0,0,1.0714285,-0.02285712,-0.02285715)">
+    <path
+       id="path1"
+       style="mix-blend-mode:normal;fill:#e0e0e0;fill-opacity:1;fill-rule:nonzero;stroke-width:0.0116022;stroke-dasharray:none"
+       d="m 0.13362081,0.04 -0.09362082,0.10162877 0.02651103,0.0286967 0.04654294,-0.0504869 v 0.36757799 a 0.04062557,0.03756027 0 0 0 0.008797,0.0230408 0.03750052,0.04069029 0 0 0 0.0304937,0.0172652 h 0.36705326 l -0.049515,0.0457243 0.0287098,0.0265532 0.10140764,-0.0937698 -0.10140766,-0.0938295 -0.0287103,0.0265533 0.0520709,0.0481055 H 0.15365267 V 0.11924308 l 0.0471372,0.0510823 0.0265109,-0.0286967 z" />
+    <path
+       style="fill:none;stroke:#e0e0e0;stroke-width:0.02512;stroke-dasharray:none;stroke-opacity:1"
+       d="m 0.15223157,0.48566925 c 0.011034,-0.0544209 0.0129896,-0.0920525 0.0241175,-0.12993189 0.0256521,-0.0796728 0.0668458,-0.14340308 0.1314192,-0.1719197 0.0534971,-0.0183337 0.0865238,-0.0176366 0.16677137,-0.0182973 0.0182263,-0.001346 0.0542625,-0.003172 0.0715742,0.002853"
+       id="path2"
+       sodipodi:nodetypes="ccccc" />
+    <text
+       xml:space="preserve"
+       style="font-size:0.274841px;font-family:Nunito;-inkscape-font-specification:'Nunito, Normal';text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#e0e0e0;fill-opacity:1;stroke:#e0e0e0;stroke-width:0.0117695;stroke-dasharray:none;stroke-opacity:1"
+       x="0.2946336"
+       y="0.43595061"
+       id="text1"
+       transform="scale(1.0261135,0.97455105)"><tspan
+         sodipodi:role="line"
+         id="tspan1"
+         style="fill:#e0e0e0;fill-opacity:1;stroke:#e0e0e0;stroke-width:0.0117695;stroke-opacity:1"
+         x="0.2946336"
+         y="0.43595061">E</tspan><tspan
+         sodipodi:role="line"
+         style="fill:#e0e0e0;fill-opacity:1;stroke:#e0e0e0;stroke-width:0.0117695;stroke-opacity:1"
+         x="0.2946336"
+         y="0.77950186"
+         id="tspan2" /></text>
+  </g>
+</svg>
