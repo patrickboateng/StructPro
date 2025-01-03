@@ -1,28 +1,49 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
+    <qresource prefix="analyze">
+       <file alias="run.svg">./imgs/analyze/run.svg</file>
+    </qresource>
+    <qresource prefix="assign">
+        <file alias="joint_loads.svg">./imgs/assign/joint_loads.svg</file>
+    </qresource>
+    <qresource prefix="define">
+        <file alias="material.svg">./imgs/define/material.svg</file>
+        <file alias="member.svg">./imgs/define/member.svg</file>
+        <file alias="node.svg">./imgs/define/node.svg</file>
+        <file alias="section.svg">./imgs/define/section.svg</file>
+    </qresource>
+    <qresource prefix="draw">
+        <file alias="draw_member.svg">./imgs/draw/draw_member.svg</file>
+        <file alias="draw_node.svg">./imgs/draw/draw_node.svg</file>
+    </qresource>
     <qresource prefix="file">
-        <file alias="exit.png">./imgs/file/exit.png</file>
-        <file alias="new.png">./imgs/file/new.png</file>
-        <file alias="open.png">./imgs/file/open.png</file>
-        <file alias="save.png">./imgs/file/save.png</file>
-        <file alias="save_as.png">./imgs/file/save_as.png</file>
+        <file alias="exit.svg">./imgs/file/exit.svg</file>
+        <file alias="new.svg">./imgs/file/new.svg</file>
+        <file alias="open.svg">./imgs/file/open.svg</file>
+        <file alias="save.svg">./imgs/file/save.svg</file>
+        <file alias="save_as.svg">./imgs/file/save_as.svg</file>
     </qresource>
     <qresource prefix="edit">
-        <file alias="redo.png">./imgs/edit/redo.png</file>
-        <file alias="undo.png">./imgs/edit/undo.png</file>
+        <file alias="redo.svg">./imgs/edit/redo.svg</file>
+        <file alias="undo.svg">./imgs/edit/undo.svg</file>
     </qresource>
     <qresource prefix="view">
-        <file alias="diagram.png">./imgs/view/diagram.png</file>
-        <file alias="grid_limits.png">./imgs/view/grid_limits.png</file>
-        <file alias="grid_snap.png">./imgs/view/grid_snap.png</file>
-        <file alias="refresh_view.png">./imgs/view/refresh_view.png</file>
-        <file alias="show_grid.png">./imgs/view/show_grid.png</file>
-        <file alias="zoom_fit.png">./imgs/view/zoom_fit.png</file>
-        <file alias="zoom_in.png">./imgs/view/zoom_in.png</file>
-        <file alias="zoom_out.png">./imgs/view/zoom_out.png</file>
+        <file alias="diagram.svg">./imgs/view/xy.svg</file>
+        <file alias="grid_limits.svg">./imgs/view/grid_limits.svg</file>
+        <file alias="grid_snap.svg">./imgs/view/grid_snap.svg</file>
+        <file alias="refresh_view.svg">./imgs/view/refresh_view.svg</file>
+        <file alias="show_grid.svg">./imgs/view/show_grid.svg</file>
+        <file alias="zoom_fit.svg">./imgs/view/zoom_fit.svg</file>
+        <file alias="zoom_in.svg">./imgs/view/zoom_in.svg</file>
+        <file alias="zoom_out.svg">./imgs/view/zoom_out.svg</file>
     </qresource>
     <qresource prefix="help">
-        <file alias="about.png">./imgs/help/about.png</file>
-        <file alias="check_update.png">./imgs/help/check_update.png</file>
+        <file alias="about.svg">./imgs/help/about.svg</file>
+        <file alias="check_update.svg">./imgs/help/check_update.svg</file>
+        <file alias="license.svg">./imgs/help/license.svg</file>
+        <file alias="quick_intro.svg">./imgs/help/quick_intro.svg</file>
+    </qresource>
+    <qresource prefix="misc">
+        <file alias="select.svg">./imgs/misc/selector.svg</file>
     </qresource>
 </RCC>
