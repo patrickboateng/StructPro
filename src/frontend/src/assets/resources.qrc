@@ -5,12 +5,20 @@
     </qresource>
     <qresource prefix="assign">
         <file alias="joint_loads.svg">./imgs/assign/joint_loads.svg</file>
+        <file alias="member_loads.svg">./imgs/assign/member_loads.svg</file>
     </qresource>
     <qresource prefix="define">
         <file alias="material.svg">./imgs/define/material.svg</file>
         <file alias="member.svg">./imgs/define/member.svg</file>
         <file alias="node.svg">./imgs/define/node.svg</file>
         <file alias="section.svg">./imgs/define/section.svg</file>
+    </qresource>
+    <qresource prefix="display">
+        <file alias="redraw_structure.svg">./imgs/display/redraw_structure.svg</file>
+        <file alias="bending_moment.svg">./imgs/display/bending_moment.svg</file>
+        <file alias="deflection.svg">./imgs/display/deflection.svg</file>
+        <file alias="shear_force.svg">./imgs/display/shear_force.svg</file>
+        <file alias="reactions.svg">./imgs/display/reactions.svg</file>
     </qresource>
     <qresource prefix="draw">
         <file alias="draw_member.svg">./imgs/draw/draw_member.svg</file>
