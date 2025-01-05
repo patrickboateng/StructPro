@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("StructPro")
 
-        TOOLBAR_ICON_SIZE = QSize(16, 16)
+        toolbar_icon_size = QSize(16, 16)
 
         menubar = self.menuBar()
 
@@ -226,7 +226,7 @@ class MainWindow(QMainWindow):
 
         horizontal_toolbar = QToolBar()
         horizontal_toolbar.setMovable(False)
-        horizontal_toolbar.setIconSize(TOOLBAR_ICON_SIZE)
+        horizontal_toolbar.setIconSize(toolbar_icon_size)
         horizontal_toolbar.addAction(new_action)
         horizontal_toolbar.addAction(open_action)
         horizontal_toolbar.addAction(save_action)
@@ -260,7 +260,7 @@ class MainWindow(QMainWindow):
         select_mode_action.setChecked(True)
 
         vertical_toolbar = QToolBar(self)
-        vertical_toolbar.setIconSize(TOOLBAR_ICON_SIZE)
+        vertical_toolbar.setIconSize(toolbar_icon_size)
         vertical_toolbar.setMovable(False)
         vertical_toolbar.addAction(select_mode_action)
         vertical_toolbar.addSeparator()
