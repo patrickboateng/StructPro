@@ -23,7 +23,15 @@ classdef Support2D
         end
 
         function support_type = getType(obj)
-            support_type = obj.type();
+            if  obj.RX && obj.RY && obj.RM 
+                support_type = SupportType.FIXED;
+            elseif obj.RX && obj.RY
+                support_type = SupportType.PINNED;
+            elseif obj.RX || obj.RY
+                support_type = SupportType.ROLLER;
+            else
+                support_type = SupportType.FREE;
+            end
         end
 
     end

@@ -33,6 +33,7 @@ beam.add_distributed_load(udl);
 % udl = UniformDistributedLoad(-10, -10, node_1, node_2);
 % beam.add_distributed_load(udl);
 
+beam.solve();
 
 [x, bm] = beam.calc_bending_moment();
 [~, sf] = beam.calc_shear_force();
@@ -47,47 +48,3 @@ subplot(4, 1, 3)
 area(x, sl)
 subplot(4, 1, 4)
 area(x, df)
-
-% % Numerical integration to find slope
-% theta = cumtrapz(x, bm ./ (section.getE() * section.getI())); % Cumulative integration for slope
-% 
-% % Numerical integration to find deflection
-% v = cumtrapz(x, theta); % Cumulative integration for deflection
-% 
-% % Adjust for boundary conditions
-% % Assume deflection and slope are zero at x = 0
-% v = v - v(1); % Adjust deflection to ensure v(0) = 0
-% theta = theta - theta(1); % Adjust slope to ensure theta(0) = 0
-% 
-% % Plot results
-% figure;
-% 
-% % Plot bending moment
-% subplot(3, 1, 1);
-% plot(x, bm, 'r-o', 'LineWidth', 1.5);
-% xlabel('x (m)');
-% ylabel('M(x) (Nm)');
-% title('Bending Moment');
-% grid on;
-% 
-% % Plot slope
-% subplot(3, 1, 2);
-% plot(x, theta, 'b-o', 'LineWidth', 1.5);
-% xlabel('x (m)');
-% ylabel('\theta(x) (rad)');
-% title('Slope');
-% grid on;
-% 
-% % Plot deflection
-% subplot(3, 1, 3);
-% plot(x, v, 'g-o', 'LineWidth', 1.5);
-% xlabel('x (m)');
-% ylabel('v(x) (m)');
-% title('Deflection');
-% grid on;
-% 
-% % Display results
-% disp('Slope values (rad):');
-% % disp(theta);
-% disp('Deflection values (m):');
-% % disp(v);

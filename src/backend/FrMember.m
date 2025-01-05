@@ -1,27 +1,5 @@
-classdef FrMember < handle
-
-    properties
-        id {mustBeNumeric}
-        start_node 
-        end_node 
-        section RectangularSection
-        distributed_load UniformDistributedLoad
-    end
-
+classdef FrMember < Member
     methods
-        function obj = FrMember(id, start_node, end_node, section)
-            arguments
-                id
-                start_node
-                end_node
-                section
-            end
-            obj.id = id;
-            obj.start_node = start_node;
-            obj.end_node = end_node;
-            obj.section = section;
-        end
-
         function len = len(obj)
             start_pos = obj.start_node.position;
             end_pos = obj.end_node.position;
@@ -38,12 +16,12 @@ classdef FrMember < handle
             k = (E * I) / L^3;
                         
             k_local_mat = ...
-            [ (A*L^2)/I    0     0  (-1*A*L^2)/I    0     0; ...
-                      0   12   6*L             0  -12   6*L; ...
-                      0  6*L 4*L^2             0 -6*L 2*L^2; ...
-           (-1*A*L^2)/I    0     0     (A*L^2)/I    0     0; ...
-                      0  -12  -6*L             0   12  -6*L; ...
-                      0  6*L 2*L^2             0 -6*L  4*L^2;...
+            [ (A*L^2)/I     0      0  (-1*A*L^2)/I     0      0; ...
+                      0    12    6*L             0   -12    6*L; ...
+                      0   6*L  4*L^2             0  -6*L  2*L^2; ...
+           (-1*A*L^2)/I     0      0     (A*L^2)/I     0      0; ...
+                      0   -12   -6*L             0    12   -6*L; ...
+                      0   6*L  2*L^2             0  -6*L   4*L^2;...
                 ];
             
             start_pos = obj.start_node.position;

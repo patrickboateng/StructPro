@@ -1,33 +1,31 @@
 classdef StaticFrame2DSolver
 
     methods (Static)
-        function res = solve(beam)
+        function res = solve(frame)
             arguments
-                beam Frame2D
+                frame Frame2D
             end
 
-            num_of_nodes = length(beam.nodes);
-            num_of_members = length(beam.members);
+            num_of_nodes = length(frame.nodes);
+            num_of_elements = num_of_nodes - 1;
             numDOF = num_of_nodes * 3;
 
             ext_force_vec = zeros(numDOF, 1);
             disp_vec = zeros(numDOF, 1);
 
             % Global stiffness matrix
-            K = zeros(numDOF);
+            G_K = zeros(numDOF);
 
-            for i=1:num_of_members
-                mem = beam.members(i);
-                mem_k = mem.stiffness_matrix();
-
-                % disp(mem_k)
+            for i=1:num_of_elements
+                mem = frame.members(i);
+                L_k = mem.stiffness_matrix();
 
                 idx_i = (i-1) * 3 + 1;
                 idx_j = idx_i + 5;
 
                 % Add element stiffness to global stiffness
-                K(idx_i:idx_j, idx_i:idx_j) = K(idx_i:idx_j, idx_i:idx_j)...
-                                              + mem_k;
+                G_K(idx_i:idx_j, idx_i:idx_j) = G_K(idx_i:idx_j, idx_i:idx_j)...
+                                              + L_k;
             end
 
             % Building the force vector
@@ -36,7 +34,7 @@ classdef StaticFrame2DSolver
                 ver_frc_idx = lat_frc_idx + 1;
                 mom_idx = lat_frc_idx + 2;
 
-                node = beam.nodes(i);
+                node = frame.nodes(i);
                 support = node.support;
 
                 ext_force_vec(lat_frc_idx) = node.lat_point_load.magnitude;
@@ -50,16 +48,16 @@ classdef StaticFrame2DSolver
 
             freeDOF = find(disp_vec);
 
-            K_ff = K(freeDOF, freeDOF);
+            K_ff = G_K(freeDOF, freeDOF);
 
             F_f = ext_force_vec(freeDOF);
 
             disp_vec(freeDOF) = gauss_elimination(K_ff, F_f);
 
-            reaction_forces = K * disp_vec - ext_force_vec;
+            reaction_forces = G_K * disp_vec - ext_force_vec;
 
-            res = reaction_forces;
-            disp(disp_vec)
+            res = struct("Displacements", disp_vec, ...
+                "Reactions", reaction_forces);
         end
 
     end
