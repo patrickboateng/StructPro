@@ -54,8 +54,8 @@ class MainWindow(QMainWindow):
         undo_action.setShortcut(QKeySequence.StandardKey.Undo)
 
         redo_action = QAction(QIcon(":/edit/redo.svg"), "Redo", self)
-        redo_action.setToolTip(
-            "<b>Redo</b><br>Do again the last undone action")
+        tip = "<b>Redo</b><br>Do again the last undone action"
+        redo_action.setToolTip(tip)
         redo_action.setStatusTip("Do again the last undone action")
         redo_action.setShortcut(QKeySequence.StandardKey.Redo)
 
@@ -65,45 +65,45 @@ class MainWindow(QMainWindow):
 
         set_grid_limit_action = QAction(QIcon(":/view/grid_limits.svg"),
                                         "Set Grid Limits", self)
-        set_grid_limit_action.setToolTip(
-            "<b>Grid Limits</b><br>Set grid limits")
+        tip = "<b>Grid Limits</b><br>Set grid limits"
+        set_grid_limit_action.setToolTip(tip)
         set_grid_limit_action.setStatusTip("Set grid limits")
 
-        show_grid_action = QAction(QIcon(":/view/show_grid.svg"), "Show Grid",
-                                   self)
+        show_grid_action = QAction(QIcon(":/view/show_grid.svg"),
+                                   "Show Grid", self)
         show_grid_action.setCheckable(True)
         show_grid_action.setChecked(True)
         show_grid_action.setToolTip("<b>Show Grid</b><br>Make grid visible")
         show_grid_action.setStatusTip("Make grid visible")
 
-        grid_snap_action = QAction(QIcon(":/view/grid_snap.svg"), "Grid Snap",
-                                   self)
+        grid_snap_action = QAction(QIcon(":/view/grid_snap.svg"),
+                                   "Grid Snap", self)
         grid_snap_action.setCheckable(True)
         grid_snap_action.setChecked(True)
         grid_snap_action.setToolTip("<b>Grid Snap</b><br>Snap to nearest grid")
         grid_snap_action.setStatusTip("Snap to nearest grid")
 
-        show_axes_action = QAction(QIcon(":/view/diagram.svg"), "Show Axis",
-                                   self)
-        show_axes_action.setCheckable(True)
-        show_axes_action.setChecked(True)
-        show_axes_action.setToolTip(
-            "<b>Show Axes</b><br>Display coordinate origin")
-        show_axes_action.setStatusTip("Display coordinate origin")
+        show_axis_action = QAction(QIcon(":/view/diagram.svg"),
+                                   "Show Axis", self)
+        show_axis_action.setCheckable(True)
+        show_axis_action.setChecked(True)
+        tip = "<b>Show Axes</b><br>Display coordinate origin"
+        show_axis_action.setToolTip(tip)
+        show_axis_action.setStatusTip("Display coordinate origin")
 
         zoom_in_action = QAction(QIcon(":/view/zoom_in.svg"), "Zoom In", self)
         zoom_in_action.setToolTip("Zoom In")
         zoom_in_action.setStatusTip("Zoom In")
         zoom_in_action.setShortcut(QKeySequence.StandardKey.ZoomIn)
 
-        zoom_out_action = QAction(QIcon(":/view/zoom_out.svg"), "Zoom Out",
-                                  self)
+        zoom_out_action = QAction(QIcon(":/view/zoom_out.svg"),
+                                  "Zoom Out", self)
         zoom_out_action.setToolTip("Zoom Out")
         zoom_out_action.setStatusTip("Zoom Out")
         zoom_out_action.setShortcut(QKeySequence.StandardKey.ZoomOut)
 
-        zoom_fit_action = QAction(QIcon(":/view/zoom_fit.svg"), "Zoom Fit",
-                                  self)
+        zoom_fit_action = QAction(QIcon(":/view/zoom_fit.svg"),
+                                  "Zoom Fit", self)
         zoom_fit_action.setToolTip("Zoom Fit")
         zoom_fit_action.setStatusTip("Zoom Fit")
 
@@ -116,7 +116,7 @@ class MainWindow(QMainWindow):
         viewmenu.addAction(set_grid_limit_action)
         viewmenu.addAction(show_grid_action)
         viewmenu.addAction(grid_snap_action)
-        viewmenu.addAction(show_axes_action)
+        viewmenu.addAction(show_axis_action)
         viewmenu.addSeparator()
         viewmenu.addAction(zoom_in_action)
         viewmenu.addAction(zoom_out_action)
@@ -124,13 +124,13 @@ class MainWindow(QMainWindow):
         viewmenu.addSeparator()
         viewmenu.addAction(refresh_view_action)
 
-        material_action = QAction(QIcon(":/define/material.svg"), "Material",
-                                  self)
+        material_action = QAction(QIcon(":/define/material.svg"),
+                                  "Material", self)
         material_action.setToolTip("Define material")
         material_action.setStatusTip("Define material")
 
-        section_action = QAction(QIcon(":/define/section.svg"), "Section",
-                                 self)
+        section_action = QAction(QIcon(":/define/section.svg"),
+                                 "Section", self)
         section_action.setToolTip("Define section")
         section_action.setStatusTip("Define section")
 
@@ -149,8 +149,8 @@ class MainWindow(QMainWindow):
         definemenu.addAction(node_action)
         definemenu.addAction(member_action)
 
-        draw_node_action = QAction(QIcon(":/draw/draw_node.svg"), "Draw Node",
-                                   self)
+        draw_node_action = QAction(QIcon(":/draw/draw_node.svg"),
+                                   "Draw Node", self)
         draw_node_action.setToolTip("Draw node")
         draw_node_action.setStatusTip("Draw node")
 
@@ -245,8 +245,8 @@ class MainWindow(QMainWindow):
         horizontal_toolbar.addAction(deflection_action)
         horizontal_toolbar.addAction(reactions_action)
 
-        select_mode_action = QAction(QIcon(":/misc/select.svg"), "Select",
-                                     self)
+        select_mode_action = QAction(QIcon(":/misc/select.svg"),
+                                     "Select", self)
         select_mode_action.setCheckable(True)
         select_mode_action.setChecked(True)
 
@@ -261,7 +261,7 @@ class MainWindow(QMainWindow):
         vertical_toolbar.addAction(set_grid_limit_action)
         vertical_toolbar.addAction(show_grid_action)
         vertical_toolbar.addAction(grid_snap_action)
-        vertical_toolbar.addAction(show_axes_action)
+        vertical_toolbar.addAction(show_axis_action)
         vertical_toolbar.addSeparator()
 
         statusbar = self.statusBar()
