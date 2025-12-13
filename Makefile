@@ -2,7 +2,7 @@
 
 RESOURCE_PATH := ./src/frontend/src/assets/resources.qrc
 RESOURCE_OUTPUT := ./src/frontend/src/assets
-PROGRAM_PATH := ./src/frontend/app.py
+PROGRAM_PATH := ./src/main.py
 OS_NAME :=
 PY_COMMAND  :=
 
