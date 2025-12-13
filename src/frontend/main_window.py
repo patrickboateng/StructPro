@@ -2,7 +2,7 @@ from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import QMainWindow, QToolBar, QWidget, QSizePolicy
 
-import resources_rc
+from . import resources_rc
 
 
 class MainWindow(QMainWindow):
