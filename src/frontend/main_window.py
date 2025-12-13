@@ -1,7 +1,6 @@
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
-from PySide6.QtWidgets import QApplication, QMainWindow, QToolBar, QWidget, \
-    QMenuBar, QSpacerItem, QSizePolicy
+from PySide6.QtWidgets import QMainWindow, QToolBar, QWidget, QSizePolicy
 
 import resources_rc
 
@@ -12,8 +11,8 @@ class MainWindow(QMainWindow):
 
         self.setWindowTitle("StructPro")
 
-        self.select_mode_action = QAction(QIcon(":/misc/select.svg"),
-                                          "Select", self)
+        self.select_mode_action = QAction(QIcon(":/misc/select.svg"), "Select",
+                                          self)
         self.select_mode_action.setCheckable(True)
         self.select_mode_action.setChecked(True)
         self.select_mode_action.triggered.connect(
@@ -116,24 +115,24 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addAction(redo_action)
 
     def add_view_menu(self):
-        show_grid_action = QAction(QIcon(":/view/show_grid.svg"),
-                                   "Show Grid", self)
+        show_grid_action = QAction(QIcon(":/view/show_grid.svg"), "Show Grid",
+                                   self)
         show_grid_action.setToolTip("<b>Show Grid</b><br>Make grid visible")
         show_grid_action.setCheckable(True)
         show_grid_action.setChecked(True)
 
-        edit_grid_action = QAction(QIcon(":/view/edit_grid.svg"),
-                                   "Edit Grid", self)
+        edit_grid_action = QAction(QIcon(":/view/edit_grid.svg"), "Edit Grid",
+                                   self)
         edit_grid_action.setToolTip("<b>Grid Data</b><br>Edit grid data")
 
-        grid_snap_action = QAction(QIcon(":/view/grid_snap.svg"),
-                                   "Grid Snap", self)
+        grid_snap_action = QAction(QIcon(":/view/grid_snap.svg"), "Grid Snap",
+                                   self)
         grid_snap_action.setCheckable(True)
         grid_snap_action.setChecked(True)
         grid_snap_action.setToolTip("<b>Grid Snap</b><br>Snap to nearest grid")
 
-        show_axis_action = QAction(QIcon(":/view/diagram.svg"),
-                                   "Show Axis", self)
+        show_axis_action = QAction(QIcon(":/view/diagram.svg"), "Show Axis",
+                                   self)
         show_axis_action.setCheckable(True)
         show_axis_action.setChecked(True)
         tip = "<b>Show Axes</b><br>Display coordinate origin"
@@ -144,17 +143,18 @@ class MainWindow(QMainWindow):
         zoom_in_action.setToolTip("Zoom In")
         zoom_in_action.setShortcut(QKeySequence.StandardKey.ZoomIn)
 
-        zoom_out_action = QAction(QIcon(":/view/zoom_out.svg"),
-                                  "Zoom Out", self)
+        zoom_out_action = QAction(QIcon(":/view/zoom_out.svg"), "Zoom Out",
+                                  self)
         zoom_out_action.setToolTip("Zoom Out")
         zoom_out_action.setShortcut(QKeySequence.StandardKey.ZoomOut)
 
-        zoom_fit_action = QAction(QIcon(":/view/zoom_fit.svg"),
-                                  "Zoom Fit", self)
+        zoom_fit_action = QAction(QIcon(":/view/zoom_fit.svg"), "Zoom Fit",
+                                  self)
         zoom_fit_action.setToolTip("Zoom Fit")
 
-        refresh_view_action = QAction(QIcon(":/view/refresh_view.svg"),
-                                      "Refresh View", self)
+        refresh_view_action = QAction(
+            QIcon(":/view/refresh_view.svg"), "Refresh View", self
+        )
         refresh_view_action.setToolTip("Refresh window")
 
         viewmenu = self.menubar.addMenu("View")
@@ -181,12 +181,12 @@ class MainWindow(QMainWindow):
         self.bottom_toolbar.addSeparator()
 
     def add_define_menu(self):
-        material_action = QAction(QIcon(":/define/material.svg"),
-                                  "Material", self)
+        material_action = QAction(QIcon(":/define/material.svg"), "Material",
+                                  self)
         material_action.setToolTip("Define material")
 
-        section_action = QAction(QIcon(":/define/section.svg"),
-                                 "Section", self)
+        section_action = QAction(QIcon(":/define/section.svg"), "Section",
+                                 self)
         section_action.setToolTip("Define section")
 
         node_action = QAction(QIcon(":/define/node.svg"), "Node", self)
@@ -209,13 +209,14 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addSeparator()
 
     def add_draw_menu(self):
-        draw_node_action = QAction(QIcon(":/draw/draw_node.svg"),
-                                   "Draw Node", self)
+        draw_node_action = QAction(QIcon(":/draw/draw_node.svg"), "Draw Node",
+                                   self)
         draw_node_action.setToolTip("Draw node")
         draw_node_action.triggered.connect(self.draw_node_action_clicked)
 
-        draw_member_action = QAction(QIcon(":/draw/draw_member.svg"),
-                                     "Draw member", self)
+        draw_member_action = QAction(
+            QIcon(":/draw/draw_member.svg"), "Draw member", self
+        )
         draw_member_action.setToolTip("Draw member")
         draw_member_action.triggered.connect(self.draw_member_action_clicked)
 
@@ -228,10 +229,12 @@ class MainWindow(QMainWindow):
         self.left_toolbar.addAction(draw_member_action)
 
     def add_assign_menu(self):
-        joint_loads_action = QAction(QIcon(":/assign/joint_loads.svg"),
-                                     "Joint loads", self)
-        member_loads_action = QAction(QIcon(":/assign/member_loads.svg"),
-                                      "Member loads", self)
+        joint_loads_action = QAction(
+            QIcon(":/assign/joint_loads.svg"), "Joint loads", self
+        )
+        member_loads_action = QAction(
+            QIcon(":/assign/member_loads.svg"), "Member loads", self
+        )
 
         assignmenu = self.menubar.addMenu("Assign")
         assignmenu.addAction(joint_loads_action)
@@ -241,25 +244,35 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addAction(member_loads_action)
 
     def add_analyze_menu(self):
-        run_static_analysis_action = QAction(QIcon(":/analyze/run.svg"),
-                                             "Run Static Analysis", self)
+        run_static_analysis_action = QAction(
+            QIcon(":/analyze/run.svg"), "Run Static Analysis", self
+        )
 
         analyzemenu = self.menubar.addMenu("Analyze")
         analyzemenu.addAction(run_static_analysis_action)
 
         self.top_toolbar.addAction(run_static_analysis_action)
+        self.top_toolbar.addSeparator()
 
     def add_display_menu(self):
         redraw_structure_action = QAction(
-            QIcon(":/display/redraw_structure.svg"), "Redraw Structure", self)
-        shear_force_action = QAction(QIcon(":/display/shear_force.svg"),
-                                     "Shear Force", self)
-        bending_moment_action = QAction(QIcon(":/display/bending_moment.svg"),
-                                        "Bending Moment", self)
-        deflection_action = QAction(QIcon(":/display/deflection.svg"),
-                                    "Deflection", self)
-        reactions_action = QAction(QIcon(":/display/reactions.svg"),
-                                   "Show Reactions", self)
+            QIcon(":/display/redraw_structure.svg"),
+            "Draw undeformed structure", self
+        )
+        shear_force_action = QAction(
+            QIcon(":/display/shear_force.svg"), "Draw shear force diagram",
+            self
+        )
+        bending_moment_action = QAction(
+            QIcon(":/display/bending_moment.svg"),
+            "Draw bending moment diagram", self
+        )
+        deflection_action = QAction(
+            QIcon(":/display/deflection.svg"), "Draw deflected shape", self
+        )
+        reactions_action = QAction(
+            QIcon(":/display/reactions.svg"), "Draw reactions", self
+        )
 
         displaymenu = self.menubar.addMenu("Display")
         displaymenu.addAction(redraw_structure_action)
@@ -277,12 +290,15 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addSeparator()
 
     def add_help_menu(self):
-        quick_intro_action = QAction(QIcon(":/help/quick_intro.svg"),
-                                     "Quick Introduction", self)
-        license_info_action = QAction(QIcon(":/help/license.svg"),
-                                      "License Information", self)
-        check_updates_action = QAction(QIcon(":/help/check_update.svg"),
-                                       "Check for Updates ...", self)
+        quick_intro_action = QAction(
+            QIcon(":/help/quick_intro.svg"), "Quick Introduction", self
+        )
+        license_info_action = QAction(
+            QIcon(":/help/license.svg"), "License Information", self
+        )
+        check_updates_action = QAction(
+            QIcon(":/help/check_update.svg"), "Check for Updates ...", self
+        )
         about_action = QAction(QIcon(":/help/about.svg"), "About", self)
 
         helpmenu = self.menubar.addMenu("Help")
@@ -293,13 +309,3 @@ class MainWindow(QMainWindow):
         helpmenu.addAction(check_updates_action)
         helpmenu.addSeparator()
         helpmenu.addAction(about_action)
-
-
-if __name__ == "__main__":
-    app = QApplication([])
-    app.setStyle("Fusion")
-
-    win = MainWindow()
-    win.show()
-
-    app.exec()
