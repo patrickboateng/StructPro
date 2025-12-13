@@ -2,8 +2,6 @@ from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import QApplication, QMainWindow, QToolBar, QWidget
 
-from assets import resources  # noqa: F401
-
 
 class MainWindow(QMainWindow):
     def __init__(self, parent: QWidget | None = None):

@@ -22,5 +22,4 @@ else
 endif
 
 run:
-	pyside6-rcc $(RESOURCE_PATH) -o $(RESOURCE_OUTPUT)/resources.py
 	$(PY_COMMAND) $(PROGRAM_PATH)
