@@ -2,7 +2,7 @@
 
 RESOURCE_PATH := ./src/frontend/src/assets/resources.qrc
 RESOURCE_OUTPUT := ./src/frontend/src/assets
-PROGRAM_PATH := ./src/frontend/src/app.py
+PROGRAM_PATH := ./src/frontend/app.py
 OS_NAME :=
 PY_COMMAND  :=
 
@@ -22,4 +22,5 @@ else
 endif
 
 run:
+	 pyside6-rcc .\assets\resources.qrc -o .\src\frontend\resources_rc.py
 	$(PY_COMMAND) $(PROGRAM_PATH)

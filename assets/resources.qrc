@@ -14,10 +14,8 @@
         <file alias="section.svg">./imgs/define/section.svg</file>
     </qresource>
     <qresource prefix="display">
-        <file alias="redraw_structure.svg">./imgs/display/redraw_structure.svg
-        </file>
-        <file alias="bending_moment.svg">./imgs/display/bending_moment.svg
-        </file>
+        <file alias="redraw_structure.svg">./imgs/display/redraw_structure.svg</file>
+        <file alias="bending_moment.svg">./imgs/display/bending_moment.svg</file>
         <file alias="deflection.svg">./imgs/display/deflection.svg</file>
         <file alias="shear_force.svg">./imgs/display/shear_force.svg</file>
         <file alias="reactions.svg">./imgs/display/reactions.svg</file>
@@ -39,12 +37,12 @@
     </qresource>
     <qresource prefix="view">
         <file alias="diagram.svg">./imgs/view/xy.svg</file>
-        <file alias="grid_limits.svg">./imgs/view/grid_limits.svg</file>
+        <file alias="edit_grid.svg">./imgs/view/edit_grid.svg</file>
         <file alias="grid_snap.svg">./imgs/view/grid_snap.svg</file>
         <file alias="refresh_view.svg">./imgs/view/refresh_view.svg</file>
         <file alias="show_grid.svg">./imgs/view/show_grid.svg</file>
         <file alias="zoom_fit.svg">./imgs/view/zoom_fit.svg</file>
-        <file alias="zoom_in.svg">./imgs/view/zoom-in.svg</file>
+        <file alias="zoom_in.svg">./imgs/view/zoom_in.svg</file>
         <file alias="zoom_out.svg">./imgs/view/zoom_out.svg</file>
     </qresource>
     <qresource prefix="help">

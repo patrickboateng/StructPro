@@ -162,4 +162,4 @@ cython_debug/
 .idea/
 
 # Project asset files
-resources.py
+*_rc.py
