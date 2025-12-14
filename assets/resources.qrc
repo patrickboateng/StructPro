@@ -53,5 +53,8 @@
     </qresource>
     <qresource prefix="misc">
         <file alias="select.svg">./imgs/misc/selector.svg</file>
+        <file alias="close">./imgs/misc/close.png</file>
+        <file alias="settings">./imgs/misc/settings.png</file>
+        <file alias="terminal">./imgs/misc/terminal.png</file>
     </qresource>
 </RCC>
