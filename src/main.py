@@ -8,6 +8,7 @@ win = MainWindow()
 win.show()
 
 app.exec()
+
 # import sys
 # import math
 # from PySide6.QtCore import Qt, QPointF, QRectF
@@ -34,8 +35,7 @@ app.exec()
 #     return QPointF(round(p.x() / g) * g, round(p.y() / g) * g)
 #
 #
-# def snap_angle(start: QPointF, end: QPointF,
-#                step_degrees: float = 45.0) -> QPointF:
+# def snap_angle(start: QPointF, end: QPointF, step_degrees: float = 45.0) -> QPointF:
 #     dx, dy = end.x() - start.x(), end.y() - start.y()
 #     if dx == 0 and dy == 0:
 #         return end
@@ -43,8 +43,7 @@ app.exec()
 #     ang = math.degrees(math.atan2(dy, dx))
 #     snapped = round(ang / step_degrees) * step_degrees
 #     rad = math.radians(snapped)
-#     return QPointF(start.x() + r * math.cos(rad),
-#                    start.y() + r * math.sin(rad))
+#     return QPointF(start.x() + r * math.cos(rad), start.y() + r * math.sin(rad))
 #
 #
 # def constrain_orthogonal(start: QPointF, end: QPointF) -> QPointF:
@@ -164,8 +163,7 @@ app.exec()
 #         return best
 #
 #     def snap_point(
-#             self, start: QPointF | None, p_scene: QPointF,
-#             mods: Qt.KeyboardModifiers
+#         self, start: QPointF | None, p_scene: QPointF, mods: Qt.KeyboardModifiers
 #     ) -> QPointF:
 #         p = QPointF(p_scene)
 #
@@ -245,8 +243,7 @@ app.exec()
 #             return
 #
 #         # Alt + Left = start drawing
-#         if event.button() == Qt.LeftButton and (
-#                 event.modifiers() & Qt.AltModifier):
+#         if event.button() == Qt.LeftButton and (event.modifiers() & Qt.AltModifier):
 #             raw = self.mapToScene(event.pos())
 #             p0 = self.snap_point(None, raw, event.modifiers())
 #             self._start_node = self.get_or_create_node(p0)
@@ -256,8 +253,7 @@ app.exec()
 #             self.scene().addItem(self._preview_line)
 #
 #             # Preview end node
-#             self._preview_end_node = NodeItem(self._start_node.scenePos(),
-#                                               radius=4.0)
+#             self._preview_end_node = NodeItem(self._start_node.scenePos(), radius=4.0)
 #             self._preview_end_node.setBrush(Qt.white)
 #             self._preview_end_node.setPen(QPen(Qt.black, 1, Qt.DashLine))
 #             self._preview_end_node.setFlags(
@@ -285,9 +281,9 @@ app.exec()
 #             return
 #
 #         if (
-#                 self._drawing
-#                 and self._start_node is not None
-#                 and self._preview_line is not None
+#             self._drawing
+#             and self._start_node is not None
+#             and self._preview_line is not None
 #         ):
 #             raw = self.mapToScene(event.pos())
 #             start = self._start_node.scenePos()

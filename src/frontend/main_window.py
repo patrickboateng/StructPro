@@ -1,3 +1,5 @@
+import math
+
 from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QAction, QIcon, QKeySequence
 from PySide6.QtWidgets import (
@@ -5,6 +7,7 @@ from PySide6.QtWidgets import (
     QToolBar,
     QWidget,
     QSizePolicy,
+    QLabel,
 )
 
 from . import resources_rc
@@ -17,14 +20,19 @@ from .settings import save_settings
 # from .command_line_interface import CommandLineInterface
 
 
+class CoordDispLabel(QLabel):
+    default_label = "X: - Y: -"
+
+
 class MainWindow(QMainWindow):
     def __init__(self, parent: QWidget | None = None):
         super().__init__(parent)
 
         self.setWindowTitle("StructPro")
 
-        self.select_mode_action = QAction(QIcon(":/misc/select"), "Select",
-                                          self)
+        self.select_mode_action = QAction(QIcon(":/misc/select"), "Select", self)
+        self.coord_display_label = CoordDispLabel(CoordDispLabel.default_label)
+        self.coord_display_label.setContentsMargins(28, 0, 0, 0)
 
         self.menubar = self.menuBar()
 
@@ -42,6 +50,7 @@ class MainWindow(QMainWindow):
         self.bottom_toolbar = QToolBar()
         self.bottom_toolbar.setIconSize(QSize(20, 20))
         self.bottom_toolbar.setMovable(False)
+        self.bottom_toolbar.addWidget(self.coord_display_label)
         self.bottom_toolbar.addWidget(spacer)
 
         self.add_select_mode_action_2_toolbar()
@@ -62,19 +71,18 @@ class MainWindow(QMainWindow):
         self.gridlines_dialog = GridLinesDialog(self)
 
         self.editor = Editor(self)
+        self.editor.scene_pos_changed.connect(self.update_coords)
+
         self.setCentralWidget(self.editor)
+
+    def update_coords(self, x, y):
+        if math.isnan(x) or math.isnan(y):
+            self.coord_display_label.setText(CoordDispLabel.default_label)
+        else:
+            self.coord_display_label.setText(f"X: {x :.3f}, Y: {y:.3f}")
 
     def create_grid_lines_dialog(self):
         self.gridlines_dialog.exec()
-
-    def zoom_in(self):
-        self.editor.scale(1.2, 1.2)
-
-    def zoom_out(self):
-        self.editor.scale(0.8, 0.8)
-
-    def zoom_fit(self):
-        self.editor.fitInView()
 
     def on_select_mode_action_clicked(self):
         self.draw_node_action.setChecked(False)
@@ -92,19 +100,18 @@ class MainWindow(QMainWindow):
         self.draw_member_action.setChecked(True)
 
     def on_zoom_in_action_clicked(self):
-        self.zoom_in()
+        self.editor.zoom_in()
 
     def on_zoom_out_action_clicked(self):
-        self.zoom_out()
+        self.editor.zoom_out()
 
     def on_zoom_fit_action_clicked(self):
-        self.zoom_fit()
+        self.editor.zoom_fit()
 
     def add_select_mode_action_2_toolbar(self):
         self.select_mode_action.setCheckable(True)
         self.select_mode_action.setChecked(True)
-        self.select_mode_action.triggered.connect(
-            self.on_select_mode_action_clicked)
+        self.select_mode_action.triggered.connect(self.on_select_mode_action_clicked)
         self.left_toolbar.addAction(self.select_mode_action)
         self.left_toolbar.addSeparator()
 
@@ -122,8 +129,7 @@ class MainWindow(QMainWindow):
         save_action.setShortcut(QKeySequence.StandardKey.Save)
 
         save_as_action = QAction(QIcon(":/file/save_as"), "Save As", self)
-        save_as_action.setToolTip(
-            "<b>Save As</b><br>Save document under a new name")
+        save_as_action.setToolTip("<b>Save As</b><br>Save document under a new name")
         save_as_action.setShortcut(QKeySequence.StandardKey.SaveAs)
 
         exit_action = QAction(QIcon(":/misc/close"), "Exit", self)
@@ -163,19 +169,16 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addSeparator()
 
     def add_view_menu(self):
-        show_grid_action = QAction(QIcon(":/view/show_grid"), "Show Grid",
-                                   self)
+        show_grid_action = QAction(QIcon(":/view/show_grid"), "Show Grid", self)
         show_grid_action.setToolTip("<b>Show Grid</b><br>Make grid visible")
         show_grid_action.setCheckable(True)
         show_grid_action.setChecked(True)
 
-        edit_grid_action = QAction(QIcon(":/view/edit_grid"), "Edit Grid",
-                                   self)
+        edit_grid_action = QAction(QIcon(":/view/edit_grid"), "Edit Grid", self)
         edit_grid_action.setToolTip("<b>Grid Data</b><br>Edit grid data")
         edit_grid_action.triggered.connect(self.create_grid_lines_dialog)
 
-        grid_snap_action = QAction(QIcon(":/view/grid_snap"), "Grid Snap",
-                                   self)
+        grid_snap_action = QAction(QIcon(":/view/grid_snap"), "Grid Snap", self)
         grid_snap_action.setCheckable(True)
         grid_snap_action.setChecked(True)
         grid_snap_action.setToolTip("<b>Grid Snap</b><br>Snap to nearest grid")
@@ -190,16 +193,16 @@ class MainWindow(QMainWindow):
         zoom_in_action = QAction(QIcon(":/view/zoom-in"), "Zoom In", self)
         zoom_in_action.setToolTip("Zoom In")
         zoom_in_action.setShortcut(QKeySequence.StandardKey.ZoomIn)
-        zoom_in_action.triggered.connect(self.zoom_in)
+        zoom_in_action.triggered.connect(self.on_zoom_in_action_clicked)
 
         zoom_out_action = QAction(QIcon(":/view/zoom-out"), "Zoom Out", self)
         zoom_out_action.setToolTip("Zoom Out")
         zoom_out_action.setShortcut(QKeySequence.StandardKey.ZoomOut)
-        zoom_out_action.triggered.connect(self.zoom_out)
+        zoom_out_action.triggered.connect(self.on_zoom_out_action_clicked)
 
         zoom_fit_action = QAction(QIcon(":/view/zoom-fit"), "Zoom Fit", self)
         zoom_fit_action.setToolTip("Zoom Fit")
-        zoom_fit_action.triggered.connect(self.zoom_fit)
+        zoom_fit_action.triggered.connect(self.on_zoom_fit_action_clicked)
 
         refresh_view_action = QAction(
             QIcon(":/view/refresh_view"), "Refresh View", self
@@ -256,20 +259,17 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addSeparator()
 
     def add_draw_menu(self):
-        self.draw_node_action = QAction(QIcon(":/draw/draw_node"), "Draw Node",
-                                        self)
+        self.draw_node_action = QAction(QIcon(":/draw/draw_node"), "Draw Node", self)
         self.draw_node_action.setCheckable(True)
         self.draw_node_action.setToolTip("Draw node")
-        self.draw_node_action.triggered.connect(
-            self.on_draw_node_action_clicked)
+        self.draw_node_action.triggered.connect(self.on_draw_node_action_clicked)
 
         self.draw_member_action = QAction(
             QIcon(":/draw/draw_member"), "Draw member", self
         )
         self.draw_member_action.setCheckable(True)
         self.draw_member_action.setToolTip("Draw member")
-        self.draw_member_action.triggered.connect(
-            self.on_draw_member_action_clicked)
+        self.draw_member_action.triggered.connect(self.on_draw_member_action_clicked)
 
         drawmenu = self.menubar.addMenu("Draw")
         drawmenu.addAction(self.draw_node_action)
@@ -280,8 +280,7 @@ class MainWindow(QMainWindow):
         self.left_toolbar.addAction(self.draw_member_action)
 
     def add_assign_menu(self):
-        joint_loads_action = QAction(QIcon(":/assign/joint_loads"),
-                                     "Joint loads", self)
+        joint_loads_action = QAction(QIcon(":/assign/joint_loads"), "Joint loads", self)
         member_loads_action = QAction(
             QIcon(":/assign/member_loads"), "Member loads", self
         )
@@ -307,21 +306,18 @@ class MainWindow(QMainWindow):
 
     def add_display_menu(self):
         redraw_structure_action = QAction(
-            QIcon(":/display/redraw_structure"), "Draw undeformed structure",
-            self
+            QIcon(":/display/redraw_structure"), "Draw undeformed structure", self
         )
         shear_force_action = QAction(
             QIcon(":/display/shear_force"), "Draw shear force diagram", self
         )
         bending_moment_action = QAction(
-            QIcon(":/display/bending_moment"), "Draw bending moment diagram",
-            self
+            QIcon(":/display/bending_moment"), "Draw bending moment diagram", self
         )
         deflection_action = QAction(
             QIcon(":/display/deflection"), "Draw deflected shape", self
         )
-        reactions_action = QAction(QIcon(":/display/reactions"),
-                                   "Draw reactions", self)
+        reactions_action = QAction(QIcon(":/display/reactions"), "Draw reactions", self)
 
         displaymenu = self.menubar.addMenu("Display")
         displaymenu.addAction(redraw_structure_action)
