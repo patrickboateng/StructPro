@@ -29,8 +29,8 @@
      showguides="true"
      showgrid="true"
      inkscape:zoom="90.509668"
-     inkscape:cx="7.3141358"
-     inkscape:cy="8.5349998"
+     inkscape:cx="6.8556212"
+     inkscape:cy="9.3636406"
      inkscape:window-width="2560"
      inkscape:window-height="1566"
      inkscape:window-x="2869"
@@ -62,39 +62,39 @@
        id="g2"
        transform="matrix(0.99399285,0,0,1.3289819,0.04811491,-1.9553983)">
       <rect
-         style="fill:#008000;fill-opacity:1;stroke:#e0e0e0;stroke-width:0.870059;stroke-opacity:1"
+         style="fill:#008000;fill-opacity:1;stroke:#e0e0e0;stroke-width:0.870057;stroke-opacity:1"
          id="rect5"
          width="6.9581871"
-         height="0.41448408"
-         x="4.5208483"
-         y="9.3338795" />
+         height="0.046539754"
+         x="4.6309004"
+         y="8.6784801" />
       <ellipse
          style="fill:#008000;fill-opacity:1;stroke:#008000;stroke-width:1.18067;stroke-dasharray:none;stroke-opacity:1"
          id="path1"
-         cx="2.5412953"
-         cy="9.5411215"
-         rx="1.9795529"
-         ry="1.5094742" />
+         cx="4.8948169"
+         cy="8.7772379"
+         rx="1.6006446"
+         ry="1.1521361" />
       <g
          id="g1"
-         transform="matrix(1.4102586,0,0,1.039303,-1.4549046,-0.56012383)"
-         style="stroke-width:0.712992">
+         transform="matrix(1.0989258,0,0,0.8901317,-1.1451098,0.48513486)"
+         style="stroke-width:0.872758">
         <path
-           style="fill:#008000;stroke:#e0e0e0;stroke-width:0.707597;stroke-dasharray:none"
+           style="fill:#008000;stroke:#e0e0e0;stroke-width:0.866154;stroke-dasharray:none"
            d="M 3.4994832,1.9833902 C 3.5117194,7.021819 3.5117194,7.021819 3.5117194,7.021819"
            id="path2-8" />
         <path
-           style="fill:#008000;stroke:#e0e0e0;stroke-width:0.705161;stroke-dasharray:none"
+           style="fill:#008000;stroke:#e0e0e0;stroke-width:0.863172;stroke-dasharray:none"
            d="m 6.4900203,4.4792316 c -5.492042,0.010035 -5.492042,0.010035 -5.492042,0.010035"
            id="path3-2" />
       </g>
       <ellipse
          style="fill:#008000;fill-opacity:1;stroke:#008000;stroke-width:1.18067;stroke-dasharray:none;stroke-opacity:1"
-         id="ellipse5"
-         cx="13.458589"
-         cy="9.5411215"
-         rx="1.9795529"
-         ry="1.5094742" />
+         id="ellipse1"
+         cx="13.85731"
+         cy="8.7583475"
+         rx="1.6006446"
+         ry="1.1521361" />
     </g>
   </g>
 </svg>
