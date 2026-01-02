@@ -1,19 +1,14 @@
 from typing import Optional
 
-from PySide6.QtCore import Qt, QSize
+from PySide6.QtCore import QSize, Qt
 from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import (
-    QDockWidget,
-    QLineEdit,
-    QPushButton,
-    QWidget,
-    QHBoxLayout,
-)
+from PySide6.QtWidgets import QDockWidget, QHBoxLayout, QLineEdit, QPushButton, \
+    QWidget
 
 from . import resources_rc
 
 
-class CommandLineInterface(QDockWidget):
+class CommandLineInterface(QWidget):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
         drag_handle = QWidget()
@@ -21,9 +16,6 @@ class CommandLineInterface(QDockWidget):
         drag_handle.setCursor(Qt.OpenHandCursor)
         self.setTitleBarWidget(drag_handle)
 
-        self.setFeatures(
-            QDockWidget.DockWidgetMovable | QDockWidget.DockWidgetFloatable,
-        )
         self.setFixedWidth(600)
         self.setFixedHeight(32)
 

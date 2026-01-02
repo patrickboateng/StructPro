@@ -1,7 +1,6 @@
 import json
-from pathlib import Path
-
 from collections import UserDict
+from pathlib import Path
 from types import SimpleNamespace
 
 settings_path = Path(__file__).resolve().parent / "settings.json"
