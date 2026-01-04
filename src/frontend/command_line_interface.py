@@ -11,15 +11,15 @@ from . import resources_rc
 class CommandLineInterface(QWidget):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
-        drag_handle = QWidget()
-        drag_handle.setFixedHeight(24)
-        drag_handle.setCursor(Qt.OpenHandCursor)
-        self.setTitleBarWidget(drag_handle)
 
-        self.setFixedWidth(600)
+        self.setFixedWidth(500)
         self.setFixedHeight(32)
 
         btn_size = QSize(32, 32)
+
+        self.drag_handle_btn = QPushButton()
+        self.drag_handle_btn.setFixedSize(btn_size)
+        self.drag_handle_btn.setIcon(QIcon(":/misc/drag-handle"))
 
         self.settings_btn = QPushButton()
         self.settings_btn.setFixedSize(btn_size)
@@ -32,25 +32,21 @@ class CommandLineInterface(QWidget):
             QIcon(":/misc/terminal"),
             QLineEdit.LeadingPosition,
         )
-        self.command_line_wgt.returnPressed.connect(
-            self.on_command_line_wgt_enter_pressed
-        )
 
         self.close_btn = QPushButton()
         self.close_btn.setFixedSize(btn_size)
         self.close_btn.setIcon(QIcon(":/misc/close"))
-        self.close_btn.clicked.connect(self.on_close_btn_clicked)
+        # self.close_btn.pressed.connect(self.on_close_btn_clicked)
 
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(0)
-        layout.addWidget(self.settings_btn)
-        layout.addWidget(self.command_line_wgt, 1)
-        layout.addWidget(self.close_btn)
+        main_layout = QHBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
+        main_layout.setSpacing(0)
+        main_layout.addWidget(self.drag_handle_btn)
+        main_layout.addWidget(self.settings_btn)
+        main_layout.addWidget(self.command_line_wgt, 1)
+        main_layout.addWidget(self.close_btn)
 
-        wgt = QWidget()
-        wgt.setLayout(layout)
-        self.setWidget(wgt)
+        self.setLayout(main_layout)
 
     def on_command_line_wgt_enter_pressed(self):
         pass
