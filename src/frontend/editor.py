@@ -4,7 +4,7 @@ import math
 from typing import Optional
 
 import numpy as np
-from PySide6.QtCore import QLineF, QPointF, QRectF, Qt, Signal
+from PySide6.QtCore import QLineF, QPointF, QRectF, Qt, Signal, QPoint
 from PySide6.QtGui import (
     QBrush,
     QColor,
@@ -23,7 +23,11 @@ from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsView,
     QWidget,
+    QGraphicsSceneEvent,
+    QGraphicsSceneHoverEvent,
 )
+
+from .command_line_interface import CommandLineInterface
 
 
 # def _draw_grid_points(self, painter: QPainter, rect: QRectF):
@@ -42,7 +46,7 @@ from PySide6.QtWidgets import (
 #         painter.drawPoints(points)
 
 
-class SceneDrawMode(enum.StrEnum):
+class SceneMode(enum.StrEnum):
     SELECT_MODE = enum.auto()
     DRAW_NODE_MODE = enum.auto()
     DRAW_MEMBER_MODE = enum.auto()
@@ -68,16 +72,38 @@ class _MemberID:
 
 class NodeItem(QGraphicsEllipseItem):
 
-    def __init__(self, pos: QPointF, radius: float = 3.0):
+    def __init__(
+            self,
+            parent: Optional["Scene"],
+            pos: QPointF,
+            radius: float = 3.0,
+            point_load_x_dir: Optional[float] = None,
+            point_load_y_dir: Optional[float] = None,
+            point_moment: Optional[float] = None,
+            restraint_x_dir: Optional[bool] = None,
+            restraint_y_dir: Optional[bool] = None,
+            restraint_moment: Optional[bool] = None,
+            user_defined: bool = True,
+            frame_connected: Optional[str] = None,
+    ):
         super().__init__(-radius, -radius, 2 * radius, 2 * radius)
 
         self.id = _NodeID.get_id()
-
-        self.setPos(pos)
+        self.scene = parent
+        self.point_load_x_dir = point_load_x_dir
+        self.point_load_y_dir = point_load_y_dir
+        self.point_moment = point_moment
+        self.restraint_x_dir = restraint_x_dir
+        self.restraint_y_dir = restraint_y_dir
+        self.restraint_moment = restraint_moment
+        self.user_defined = user_defined
+        self.frame_connected = frame_connected
+        self._hover_item = None
 
         pen = QPen(Qt.white, 1)
         pen.setCosmetic(True)
 
+        self.setPos(pos)
         self.setBrush(QBrush(Qt.green))
         self.setPen(pen)
         self.setFlag(QGraphicsItem.ItemIsSelectable)
@@ -85,7 +111,20 @@ class NodeItem(QGraphicsEllipseItem):
         self.setAcceptHoverEvents(True)
 
     def __str__(self) -> str:
-        return f"Create node {self.id}"
+        return f"Node {self.id}"
+
+    def hoverEnterEvent(self, event: QGraphicsSceneHoverEvent) -> None:
+        w = self.rect().width()
+        self._hover_item = QGraphicsEllipseItem(-w, -w, 2 * w, 2 * w)
+        self._hover_item.setPos(self.pos())
+        self._hover_item.setPen(QPen(Qt.red))
+        self.scene.addItem(self._hover_item)
+        super().hoverEnterEvent(event)
+
+    def hoverLeaveEvent(self, event: QGraphicsSceneHoverEvent) -> None:
+        if self._hover_item is not None:
+            self.scene.removeItem(self._hover_item)
+        super().hoverLeaveEvent(event)
 
 
 class EdgeItem(QGraphicsLineItem):
@@ -101,7 +140,13 @@ class EdgeItem(QGraphicsLineItem):
         self.setFlag(QGraphicsItem.ItemIsSelectable)
 
     def __str__(self) -> str:
-        return f"Create member {self.id}"
+        return f"Member {self.id}"
+
+    @property
+    def length(self):
+        delta_x = self.end_node.x() - self.start_node.x()
+        delta_y = self.end_node.y() - self.start_node.y()
+        return math.sqrt(delta_x ** 2 + delta_y ** 2)
 
 
 class EdgePreview(QGraphicsLineItem):
@@ -125,7 +170,7 @@ class Scene(QGraphicsScene):
 
         self._grid_size = grid_size
         self.snap = True
-        self.tool_mode = SceneDrawMode.SELECT_MODE
+        self.tool_mode = SceneMode.SELECT_MODE
 
         # member drawing state
         self._member_start_node: QPointF | None = None
@@ -204,11 +249,11 @@ class Scene(QGraphicsScene):
 
     @property
     def draw_node_clicked(self):
-        return self.tool_mode == SceneDrawMode.DRAW_NODE_MODE
+        return self.tool_mode == SceneMode.DRAW_NODE_MODE
 
     @property
     def draw_member_clicked(self):
-        return self.tool_mode == SceneDrawMode.DRAW_MEMBER_MODE
+        return self.tool_mode == SceneMode.DRAW_MEMBER_MODE
 
     def mousePressEvent(self, event):
         mouse_pos = self.set_snap_position(event.scenePos())
@@ -217,7 +262,7 @@ class Scene(QGraphicsScene):
         draw_node_mode = button_pressed == Qt.LeftButton and self.draw_node_clicked
 
         if draw_node_mode:
-            node_item = NodeItem(mouse_pos)
+            node_item = NodeItem(self, mouse_pos)
             self.graphics_item_created.emit(self, node_item)
             event.accept()
             return
@@ -244,7 +289,7 @@ class Scene(QGraphicsScene):
 
     def mouseMoveEvent(self, event):
         draw_member_mode = (
-                self.tool_mode == SceneDrawMode.DRAW_MEMBER_MODE
+                self.tool_mode == SceneMode.DRAW_MEMBER_MODE
                 and self._member_start_node is not None
         )
 
@@ -265,6 +310,7 @@ class Editor(QGraphicsView):
         super().__init__(parent)
         self.setMouseTracking(True)
         self.viewport().setMouseTracking(True)
+        self.setAcceptDrops(True)
 
         self.parent = parent
         self.setScene(Scene(parent))
@@ -277,11 +323,26 @@ class Editor(QGraphicsView):
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
         self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
+        self.command_line_interface = CommandLineInterface(self)
+        self.command_line_interface.raise_()
+        self.command_line_interface.adjustSize()
+
+        self._position_command_line()
+
         # Pan support (middle mouse)
         # TODO: Rewrite panning code
         self._panning = False
         self._pan_start_x = None
         self._pan_start_y = None
+
+    def _position_command_line(self):
+        viewport_width = self.viewport().width()
+        viewport_height = self.viewport().height()
+        wgt_width = self.command_line_interface.width()
+        wgt_height = self.command_line_interface.height()
+        x = (viewport_width - wgt_width) // 2
+        y = viewport_height - wgt_height
+        self.command_line_interface.move(QPoint(x, y))
 
     def set_snap_enabled(self, enabled: bool):
         self.scene().snap = enabled
@@ -289,7 +350,7 @@ class Editor(QGraphicsView):
     def set_grid_size(self, grid_size: float):
         self.scene().grid_size = grid_size
 
-    def set_tool_mode(self, mode: SceneDrawMode):
+    def set_tool_mode(self, mode: SceneMode):
         self.scene().tool_mode = mode
 
     def scene(self) -> Scene:
@@ -304,6 +365,9 @@ class Editor(QGraphicsView):
             self.setCursor(cursor)
         else:
             self.setCursor(Qt.ArrowCursor)
+
+    # def dragEnterEvent(self, event):
+    #     event.accept()
 
     # TODO: Rewrite logic
     def mousePressEvent(self, event: QMouseEvent):
@@ -358,6 +422,7 @@ class Editor(QGraphicsView):
         h = self.rect().height()
         self.setSceneRect(QRectF(-w / 2, -h / 2, w, h))
         self.centerOn(QPointF(0, 0))
+        self._position_command_line()
 
     def zoom_in(self):
         self.scale(1.2, 1.2)
