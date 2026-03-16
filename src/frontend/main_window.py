@@ -1,14 +1,16 @@
-import math
+# assets
+from . import resources_rc
+
 from typing import Optional
 
-from PySide6.QtCore import QSize, Qt
+from PySide6.QtCore import QSize, Qt, QPoint, QPointF, QSettings
 from PySide6.QtGui import (
     QAction,
     QActionGroup,
     QIcon,
     QKeySequence,
-    QUndoCommand,
     QUndoStack,
+    QCloseEvent,
 )
 from PySide6.QtWidgets import (
     QDockWidget,
@@ -20,79 +22,38 @@ from PySide6.QtWidgets import (
     QUndoView,
     QWidget,
     QTabWidget,
-    QComboBox,
 )
 
-from . import resources_rc
-
-from .dialog import GridSpacingDialog
-from .editor import Editor, Scene, SceneDrawMode
-
-
-class AddCommand(QUndoCommand):
-    def __init__(
-            self,
-            scene: Scene,
-            graphics_item: QGraphicsItem,
-            parent: Optional[QWidget] = None,
-    ):
-        super().__init__(parent)
-
-        self.scene = scene
-        self.graphics_item = graphics_item
-
-        self.setText(str(graphics_item))
-
-    def undo(self):
-        self.scene.removeItem(self.graphics_item)
-        self.scene.update()
-
-    def redo(self):
-        self.scene.addItem(self.graphics_item)
-        self.scene.clearSelection()
-        self.scene.update()
-
-
-class DeleteCommand(QUndoCommand):
-    def __init__(self, scene: Scene):
-        super().__init__(None)
-        self.scene = scene
-
-        self.selected_graphics_item = self.scene.selectedItems()
-
-    def undo(self):
-        for graphics_item in self.selected_graphics_item:
-            self.scene.addItem(graphics_item)
-            self.scene.update()
-
-    def redo(self):
-        for graphics_item in self.selected_graphics_item:
-            self.scene.removeItem(graphics_item)
-            self.scene.update()
+from .modal_dialog import GridSpacingDialog
+from .editor import Editor, Scene, SceneMode
+from .undo_framework import AddCommand, DeleteCommand, MoveCommand
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, parent: QWidget | None = None):
+    def __init__(self, width: int, height: int, parent: Optional[QWidget] = None):
         super().__init__(parent)
 
         self.setWindowTitle("StructPro")
+        self.settings = QSettings("SAS", "StructPro")
+        geometry = self.settings.value("geometry")
+
+        if geometry:
+            self.restoreGeometry(geometry)
+        else:
+            self.resize(width, height)
 
         self.undo_stack = QUndoStack(self)
 
         self.editor = Editor(self)
         self.editor.scene_pos_changed.connect(self.update_coord_display_label)
-        self.editor.scene().graphics_item_created.connect(
-            self.add_graphics_item)
+        self.editor.scene().graphics_item_created.connect(self.add_graphics_item)
 
-        self.grid_spacing_dialog = GridSpacingDialog(self)
-        self.grid_spacing_dialog.grid_spacing_changed.connect(
-            self.editor.set_grid_size)
+        self.grid_spacing_dialog = None
 
-        self.select_mode_action = QAction(QIcon(":/misc/select"), "Select",
-                                          self)
+        self.select_mode_action = QAction(QIcon(":/misc/select"), "Select", self)
         self.select_mode_action.setCheckable(True)
         self.select_mode_action.setChecked(True)
-        self.select_mode_action.setData(SceneDrawMode.SELECT_MODE)
+        self.select_mode_action.setData(SceneMode.SELECT_MODE)
 
         self.coord_display_label = QLabel("X: - Y: -")
         self.coord_display_label.setContentsMargins(28, 0, 0, 0)
@@ -142,11 +103,6 @@ class MainWindow(QMainWindow):
 
         self._create_help_menu_actions()
         self._add_help_menu()
-
-        self.workbench_mode = QComboBox()
-        self.workbench_mode.setEditable(False)
-        self.workbench_mode.setInsertPolicy(QComboBox.NoInsert)
-        self.workbench_mode.addItem("2D")
 
         # ADD FILE MENU ITEMS TO TOP TOOLBAR
         self.top_toolbar.addAction(self.new_action)
@@ -203,9 +159,6 @@ class MainWindow(QMainWindow):
         self.top_toolbar.addAction(self.reactions_diagram_action)
         self.top_toolbar.addSeparator()
 
-        # ADD WORKBENCH MODE TO TOP TOOLBAR
-        self.top_toolbar.addWidget(self.workbench_mode)
-
         self.addToolBar(Qt.ToolBarArea.TopToolBarArea, self.top_toolbar)
         self.addToolBar(Qt.ToolBarArea.LeftToolBarArea, self.left_toolbar)
         self.addToolBar(Qt.ToolBarArea.BottomToolBarArea, self.bottom_toolbar)
@@ -216,6 +169,11 @@ class MainWindow(QMainWindow):
 
     def add_graphics_item(self, scene: Scene, graphics_item: QGraphicsItem):
         self.undo_stack.push(AddCommand(scene, graphics_item))
+
+    def move_graphics_item(
+        self, scene: Scene, graphics_item: QGraphicsItem, new_pos: QPointF
+    ):
+        self.undo_stack.push(MoveCommand(scene, graphics_item, new_pos))
 
     def delete_graphics_item(self):
         self.undo_stack.push(DeleteCommand(self.editor.scene()))
@@ -249,6 +207,9 @@ class MainWindow(QMainWindow):
         self.coord_display_label.setText(f"X: {x :.3f}, Y: {y:.3f}")
 
     def show_grid_lines_dialog(self):
+        if self.grid_spacing_dialog is None:
+            self.grid_spacing_dialog = GridSpacingDialog(self)
+        self.grid_spacing_dialog.grid_spacing_changed.connect(self.editor.set_grid_size)
         self.grid_spacing_dialog.exec()
 
     def on_zoom_in_action_clicked(self):
@@ -294,14 +255,12 @@ class MainWindow(QMainWindow):
         filemenu.addAction(self.exit_action)
 
     def _create_edit_menu_actions(self):
-        self.undo_action = self.undo_stack.createUndoAction(self,
-                                                            self.tr("&Undo"))
+        self.undo_action = self.undo_stack.createUndoAction(self, self.tr("&Undo"))
         self.undo_action.setIcon(QIcon(":/edit/undo"))
         self.undo_action.setToolTip("<b>Undo</b><br>Undo last action")
         self.undo_action.setShortcut(QKeySequence.StandardKey.Undo)
 
-        self.redo_action = self.undo_stack.createRedoAction(self,
-                                                            self.tr("&Redo"))
+        self.redo_action = self.undo_stack.createRedoAction(self, self.tr("&Redo"))
         self.redo_action.setIcon(QIcon(":/edit/redo"))
         tip = "<b>Redo</b><br>Do again the last undone action"
         self.redo_action.setToolTip(tip)
@@ -318,28 +277,22 @@ class MainWindow(QMainWindow):
         editmenu.addAction(self.delete_action)
 
     def _create_view_menu_actions(self):
-        self.show_grid_action = QAction(QIcon(":/view/show_grid"), "Show Grid",
-                                        self)
-        self.show_grid_action.setToolTip(
-            "<b>Show Grid</b><br>Make grid visible")
+        self.show_grid_action = QAction(QIcon(":/view/show_grid"), "Show Grid", self)
+        self.show_grid_action.setToolTip("<b>Show Grid</b><br>Make grid visible")
         self.show_grid_action.setCheckable(True)
         self.show_grid_action.setChecked(True)
 
-        self.edit_grid_action = QAction(QIcon(":/view/edit_grid"), "Edit Grid",
-                                        self)
+        self.edit_grid_action = QAction(QIcon(":/view/edit_grid"), "Edit Grid", self)
         self.edit_grid_action.setToolTip("<b>Grid Data</b><br>Edit grid data")
         self.edit_grid_action.triggered.connect(self.show_grid_lines_dialog)
 
-        self.grid_snap_action = QAction(QIcon(":/view/grid_snap"), "Grid Snap",
-                                        self)
+        self.grid_snap_action = QAction(QIcon(":/view/grid_snap"), "Grid Snap", self)
         self.grid_snap_action.setCheckable(True)
         self.grid_snap_action.setChecked(True)
-        self.grid_snap_action.setToolTip(
-            "<b>Grid Snap</b><br>Snap to nearest grid")
+        self.grid_snap_action.setToolTip("<b>Grid Snap</b><br>Snap to nearest grid")
         self.grid_snap_action.triggered.connect(self.editor.set_snap_enabled)
 
-        self.show_axis_action = QAction(QIcon(":/view/diagram"), "Show Axis",
-                                        self)
+        self.show_axis_action = QAction(QIcon(":/view/diagram"), "Show Axis", self)
         self.show_axis_action.setCheckable(True)
         self.show_axis_action.setChecked(True)
         tip = "<b>Show Axes</b><br>Display coordinate origin"
@@ -351,14 +304,12 @@ class MainWindow(QMainWindow):
         self.zoom_in_action.setShortcut(QKeySequence.StandardKey.ZoomIn)
         self.zoom_in_action.triggered.connect(self.on_zoom_in_action_clicked)
 
-        self.zoom_out_action = QAction(QIcon(":/view/zoom-out"), "Zoom Out",
-                                       self)
+        self.zoom_out_action = QAction(QIcon(":/view/zoom-out"), "Zoom Out", self)
         self.zoom_out_action.setToolTip("Zoom Out")
         self.zoom_out_action.setShortcut(QKeySequence.StandardKey.ZoomOut)
         self.zoom_out_action.triggered.connect(self.on_zoom_out_action_clicked)
 
-        self.zoom_fit_action = QAction(QIcon(":/view/zoom-fit"), "Zoom Fit",
-                                       self)
+        self.zoom_fit_action = QAction(QIcon(":/view/zoom-fit"), "Zoom Fit", self)
         self.zoom_fit_action.setToolTip("Zoom Fit")
         self.zoom_fit_action.triggered.connect(self.on_zoom_fit_action_clicked)
 
@@ -381,12 +332,10 @@ class MainWindow(QMainWindow):
         viewmenu.addAction(self.refresh_view_action)
 
     def _create_define_menu_actions(self):
-        self.material_action = QAction(QIcon(":/define/material"), "Material",
-                                       self)
+        self.material_action = QAction(QIcon(":/define/material"), "Material", self)
         self.material_action.setToolTip("Define material")
 
-        self.section_action = QAction(QIcon(":/define/section"), "Section",
-                                      self)
+        self.section_action = QAction(QIcon(":/define/section"), "Section", self)
         self.section_action.setToolTip("Define section")
 
     def _add_define_menu(self):
@@ -402,14 +351,14 @@ class MainWindow(QMainWindow):
         )
         self.draw_node_action.setCheckable(True)
         self.draw_node_action.setToolTip("Draw node")
-        self.draw_node_action.setData(SceneDrawMode.DRAW_NODE_MODE)
+        self.draw_node_action.setData(SceneMode.DRAW_NODE_MODE)
 
         self.draw_member_action = QAction(
             QIcon(":/draw/draw_member"), "Draw member", self
         )
         self.draw_member_action.setCheckable(True)
         self.draw_member_action.setToolTip("Draw member")
-        self.draw_member_action.setData(SceneDrawMode.DRAW_MEMBER_MODE)
+        self.draw_member_action.setData(SceneMode.DRAW_MEMBER_MODE)
 
         action_group = QActionGroup(self)
         action_group.setExclusive(True)
@@ -450,15 +399,13 @@ class MainWindow(QMainWindow):
 
     def _create_display_menu_actions(self):
         self.redraw_structure_action = QAction(
-            QIcon(":/display/redraw_structure"), "Draw undeformed structure",
-            self
+            QIcon(":/display/redraw_structure"), "Draw undeformed structure", self
         )
         self.shear_force_diagram_action = QAction(
             QIcon(":/display/shear_force"), "Draw shear force diagram", self
         )
         self.bending_moment_diagram_action = QAction(
-            QIcon(":/display/bending_moment"), "Draw bending moment diagram",
-            self
+            QIcon(":/display/bending_moment"), "Draw bending moment diagram", self
         )
         self.deflection_diagram_action = QAction(
             QIcon(":/display/deflection"), "Draw deflected shape", self
@@ -497,3 +444,7 @@ class MainWindow(QMainWindow):
         helpmenu.addAction(self.check_updates_action)
         helpmenu.addSeparator()
         helpmenu.addAction(self.about_action)
+
+    def closeEvent(self, event: QCloseEvent) -> None:
+        self.settings.setValue("geometry", self.saveGeometry())
+        super().closeEvent(event)

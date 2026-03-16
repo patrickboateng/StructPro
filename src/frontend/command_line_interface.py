@@ -1,23 +1,28 @@
 from typing import Optional
 
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtGui import QIcon
-from PySide6.QtWidgets import QDockWidget, QHBoxLayout, QLineEdit, QPushButton, \
-    QWidget
+from PySide6.QtCore import QSize, Qt, QMimeData
+from PySide6.QtGui import QIcon, QMouseEvent, QDrag
+from PySide6.QtWidgets import QDockWidget, QHBoxLayout, QLineEdit, QPushButton, QWidget
 
 from . import resources_rc
+
+
+class DragButton(QPushButton):
+
+    def __init__(self, parent):
+        super().__init__(parent)
+        self.parent = parent
 
 
 class CommandLineInterface(QWidget):
     def __init__(self, parent: Optional[QWidget] = None):
         super().__init__(parent)
 
-        self.setFixedWidth(500)
-        self.setFixedHeight(32)
+        self.setGeometry(0, 0, 600, 32)
 
         btn_size = QSize(32, 32)
 
-        self.drag_handle_btn = QPushButton()
+        self.drag_handle_btn = DragButton(self)
         self.drag_handle_btn.setFixedSize(btn_size)
         self.drag_handle_btn.setIcon(QIcon(":/misc/drag-handle"))
 

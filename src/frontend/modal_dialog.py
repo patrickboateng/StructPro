@@ -27,6 +27,7 @@ class GridSpacingDialog(QDialog):
         super().__init__(parent)
 
         self.setWindowTitle("Grid Spacing")
+
         self.parent = parent
 
         btns = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
@@ -36,7 +37,8 @@ class GridSpacingDialog(QDialog):
 
         self.grid_spacing_input = DialogFormInputFloat(20)
         grid_spacing_form_layout = QFormLayout()
-        grid_spacing_form_layout.addRow("Grid spacing", self.grid_spacing_input)
+        grid_spacing_form_layout.addRow("Grid spacing",
+                                        self.grid_spacing_input)
 
         main_layout = QVBoxLayout()
         main_layout.addLayout(grid_spacing_form_layout)

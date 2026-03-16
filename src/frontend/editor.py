@@ -25,9 +25,11 @@ from PySide6.QtWidgets import (
     QWidget,
     QGraphicsSceneEvent,
     QGraphicsSceneHoverEvent,
+    QComboBox,
 )
 
 from .command_line_interface import CommandLineInterface
+from .non_modal_dialog import CreateNodeDialog
 
 
 # def _draw_grid_points(self, painter: QPainter, rect: QRectF):
@@ -186,15 +188,31 @@ class Scene(QGraphicsScene):
         self._grid_size = grid_size
         self.update()
 
-    def drawBackground(self, painter: QPainter, rect: QRectF):
-        super().drawBackground(painter, rect)
+    @property
+    def draw_node_clicked(self):
+        return self.tool_mode == SceneMode.DRAW_NODE_MODE
 
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(QBrush(QColor(55, 55, 55, 255)))
-        painter.drawRect(rect)
+    @property
+    def draw_member_clicked(self):
+        return self.tool_mode == SceneMode.DRAW_MEMBER_MODE
 
-        self._draw_grid_lines(painter, rect)
-        self._draw_grid_center_lines(painter, rect)
+    @staticmethod
+    def snap_to_grid(pos: QPointF, grid_size: float) -> QPointF:
+        x = round(pos.x() / grid_size) * grid_size
+        y = round(pos.y() / grid_size) * grid_size
+        return QPointF(x, y)
+
+    def set_snap_position(self, pos: QPointF) -> QPointF:
+        if self.snap:
+            pos = self.snap_to_grid(pos, self.grid_size)
+        return pos
+
+    @staticmethod
+    @functools.lru_cache
+    def _grid_coord(left: float, top: float, grid_size: float):
+        left = math.floor(left / grid_size) * grid_size
+        top = math.floor(top / grid_size) * grid_size
+        return left, top
 
     def _draw_grid_lines(self, painter: QPainter, rect: QRectF):
         left, top = self._grid_coord(rect.left(), rect.top(), self.grid_size)
@@ -216,16 +234,9 @@ class Scene(QGraphicsScene):
         painter.drawLines(y_grid_lines)
 
     @staticmethod
-    @functools.lru_cache
-    def _grid_coord(left: float, top: float, grid_size: float):
-        left = math.floor(left / grid_size) * grid_size
-        top = math.floor(top / grid_size) * grid_size
-        return left, top
-
-    @staticmethod
     def _draw_grid_center_lines(painter: QPainter, rect: QRectF):
         x_axis_pen = QPen(QColor("red"), 2)
-        x_axis_pen.setCosmetic(True)  # stays 2px even when zooming
+        x_axis_pen.setCosmetic(True)
 
         y_axis_pen = QPen(QColor("green"), 2)
         y_axis_pen.setCosmetic(True)
@@ -236,24 +247,15 @@ class Scene(QGraphicsScene):
         painter.setPen(y_axis_pen)
         painter.drawLine(QLineF(0, rect.top(), 0, rect.bottom()))
 
-    @staticmethod
-    def snap_to_grid(pos: QPointF, grid_size: float) -> QPointF:
-        x = round(pos.x() / grid_size) * grid_size
-        y = round(pos.y() / grid_size) * grid_size
-        return QPointF(x, y)
+    def drawBackground(self, painter: QPainter, rect: QRectF):
+        super().drawBackground(painter, rect)
 
-    def set_snap_position(self, pos: QPointF) -> QPointF:
-        if self.snap:
-            pos = self.snap_to_grid(pos, self.grid_size)
-        return pos
+        painter.setPen(Qt.NoPen)
+        painter.setBrush(QBrush(QColor(55, 55, 55, 255)))
+        painter.drawRect(rect)
 
-    @property
-    def draw_node_clicked(self):
-        return self.tool_mode == SceneMode.DRAW_NODE_MODE
-
-    @property
-    def draw_member_clicked(self):
-        return self.tool_mode == SceneMode.DRAW_MEMBER_MODE
+        self._draw_grid_lines(painter, rect)
+        self._draw_grid_center_lines(painter, rect)
 
     def mousePressEvent(self, event):
         mouse_pos = self.set_snap_position(event.scenePos())
@@ -306,7 +308,7 @@ class Scene(QGraphicsScene):
 class Editor(QGraphicsView):
     scene_pos_changed = Signal(float, float)
 
-    def __init__(self, parent: Optional[QWidget] = None):
+    def __init__(self, parent: Optional[QWidget]):
         super().__init__(parent)
         self.setMouseTracking(True)
         self.viewport().setMouseTracking(True)
@@ -326,8 +328,14 @@ class Editor(QGraphicsView):
         self.command_line_interface = CommandLineInterface(self)
         self.command_line_interface.raise_()
         self.command_line_interface.adjustSize()
-
         self._position_command_line()
+
+        self.workbench_mode = QComboBox(self)
+        self.workbench_mode.setMaxCount(2)
+        self.workbench_mode.setEditable(False)
+        self.workbench_mode.setInsertPolicy(QComboBox.NoInsert)
+        self.workbench_mode.addItems(["2D"])
+        self._position_workbench_mode()
 
         # Pan support (middle mouse)
         # TODO: Rewrite panning code
@@ -335,9 +343,26 @@ class Editor(QGraphicsView):
         self._pan_start_x = None
         self._pan_start_y = None
 
+    def _position_workbench_mode(self):
+        viewport_width = self.viewport_width
+        viewport_height = self.viewport_height
+        wgt_width = self.workbench_mode.width()
+        wgt_height = self.workbench_mode.height()
+        x = viewport_width - wgt_width
+        y = viewport_height - wgt_height
+        self.workbench_mode.move(x, y)
+
+    @property
+    def viewport_width(self):
+        return self.viewport().width()
+
+    @property
+    def viewport_height(self):
+        return self.viewport().height()
+
     def _position_command_line(self):
-        viewport_width = self.viewport().width()
-        viewport_height = self.viewport().height()
+        viewport_width = self.viewport_width
+        viewport_height = self.viewport_height
         wgt_width = self.command_line_interface.width()
         wgt_height = self.command_line_interface.height()
         x = (viewport_width - wgt_width) // 2
@@ -352,6 +377,9 @@ class Editor(QGraphicsView):
 
     def set_tool_mode(self, mode: SceneMode):
         self.scene().tool_mode = mode
+        if mode == SceneMode.DRAW_NODE_MODE:
+            self.dlg = CreateNodeDialog(self)
+            self.dlg.show()
 
     def scene(self) -> Scene:
         return super().scene()
@@ -366,9 +394,6 @@ class Editor(QGraphicsView):
         else:
             self.setCursor(Qt.ArrowCursor)
 
-    # def dragEnterEvent(self, event):
-    #     event.accept()
-
     # TODO: Rewrite logic
     def mousePressEvent(self, event: QMouseEvent):
         if event.button() == Qt.MiddleButton:
@@ -382,7 +407,6 @@ class Editor(QGraphicsView):
 
     # TODO: Rewrite logic
     def mouseReleaseEvent(self, event: QMouseEvent):
-
         if event.button() == Qt.MiddleButton:
             self._panning = False
             self.setCursor(Qt.ArrowCursor)
@@ -423,6 +447,7 @@ class Editor(QGraphicsView):
         self.setSceneRect(QRectF(-w / 2, -h / 2, w, h))
         self.centerOn(QPointF(0, 0))
         self._position_command_line()
+        self._position_workbench_mode()
 
     def zoom_in(self):
         self.scale(1.2, 1.2)
